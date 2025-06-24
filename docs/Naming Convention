@@ -1,0 +1,20 @@
+# Branch Naming Convention
+
+feat/ - features
+fix/ - Bug fix
+refactor/ - Refactor
+docs/ - document
+chore/ - setup or tools
+test/ - test
+
+example: git checkout -b feat/signup-ui
+
+# Commit Message Convention
+"feat:" - Features
+"fix:"  - Bug fixes
+"docs:" - Docs
+"chore:" - chores
+"style:" - style
+"refactor:" - refactor code, no behaviour change
+
+example: git commit -m "feat: add signup UI with validation"
