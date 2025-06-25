@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/app
+      - ./.tool-versions:/app/.tool-versions
+    working_dir: /app
+    command: ["pnpm", "dev"]
+    tty: true
