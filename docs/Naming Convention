@@ -1,20 +1,24 @@
 # Branch Naming Convention
 
-feat/ - features
-fix/ - Bug fix
-refactor/ - Refactor
-docs/ - document
-chore/ - setup or tools
-test/ - test
+Use prefixes to clearly indicate the purpose of the branch:
+
+`feat/`    - New feature
+`fix/`     - Bug fix
+`refactor/`- Code improvement without behavior change
+`docs/`    - Documentation
+`chore/`   - Project setup, tooling, or maintenance
+`test/`    - Adding or updating tests
+`style/`   - Code style (formatting, linting, etc.)
 
 example: git checkout -b feat/signup-ui
 
 # Commit Message Convention
-"feat:" - Features
-"fix:"  - Bug fixes
-"docs:" - Docs
-"chore:" - chores
-"style:" - style
-"refactor:" - refactor code, no behaviour change
+`feat:`     - New feature
+`fix:`      - Bug fixes
+`docs:`     - Documentation changes
+`chore:`    - chores
+`style:`    - style
+`refactor:` - refactor code, no behaviour change
+`test:`     - Adding or modifying tests
 
-example: git commit -m "feat: add signup UI with validation"
+example: git commit -m `feat: add signup UI with validation`

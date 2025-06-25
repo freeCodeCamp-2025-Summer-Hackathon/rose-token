@@ -1,11 +1,12 @@
-# rose-token 
+# 🌹 rose-token 🪙
 
 Welcome to rose-token
 
 This repo contains:
 
-frontend/: frontend 
-backend/: backend
+client/web: Website frontend 
+
+api/: Backend Api
 
 docs/: Api specs, design, setup guide, Technical docs
 
