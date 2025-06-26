@@ -7,5 +7,7 @@ services:
       - ./client:/app
       - ./.tool-versions:/app/.tool-versions
     working_dir: /app
+    ports:
+      - "5173:5173"   
     command: ["pnpm", "dev"]
     tty: true
