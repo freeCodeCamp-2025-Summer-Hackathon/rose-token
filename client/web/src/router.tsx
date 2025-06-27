@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { Application } from "./app.tsx";
-import { ErrorPage } from "./pages/error";
-import { HomePage } from "./pages";
+import { ErrorPage } from "./pages/error.tsx";
+import { HomePage } from "./pages/index.tsx";
 
 export const router = createBrowserRouter([
 	{

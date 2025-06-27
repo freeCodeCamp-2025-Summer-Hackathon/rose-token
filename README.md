@@ -4,7 +4,7 @@ Welcome to rose-token
 
 This repo contains:
 
-client: Website frontend 
+client/web: Website frontend 
 
 api/: Backend Api
 
