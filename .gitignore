@@ -1,11 +1,11 @@
 # Node Modules
-frontend/node_modules/
-backend/node_modules/
+client/node_modules/
+api/node_modules/
 
 
 # Environment files
-frontend/.env
-backend/.env
+client/.env
+api/.env
 
 # MISC
 *.log

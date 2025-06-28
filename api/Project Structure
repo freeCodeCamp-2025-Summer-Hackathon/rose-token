@@ -1,0 +1,17 @@
+api/
+├── node_modules/
+├── src/
+│   ├── config/          // Environment configuration and settings
+│   ├── controllers/     // Handles request logic and interacts with services
+│   ├── middlewares/     // Custom middleware functions (e.g., error handling, authentication)
+│   ├── models/          // Defines data models (e.g., Mongoose schemas)
+│   ├── routes/          // Defines API endpoints and maps them to controllers
+│   ├── services/        // Contains business logic and interacts with models
+│   ├── types/           // Custom TypeScript type definitions
+│   ├── utils/           // Utility functions and helpers
+│   ├── app.ts           // Main application file, sets up Express app and middleware
+│   └── index.ts         // Entry point of your application
+├── dist/                // Compiled JavaScript output
+├── .gitignore           // Specifies files and directories to ignore for Git
+├── package.json         // Project dependencies and scripts
+└── tsconfig.json        // TypeScript compiler configuration
