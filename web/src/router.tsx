@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router";
 import { Application } from "./app.tsx";
 import { ErrorPage } from "./pages/error.tsx";
-import { HomePage } from "./pages/index.tsx";
+import { Entry } from "./pages/home.tsx";
+import Map from "./pages/index.tsx";
 
 export const router = createBrowserRouter([
 	{
@@ -11,7 +12,18 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <HomePage />,
+				element: <Map title="LangLantern" description="Get started"/>,
+			},
+		],
+	},
+	{
+		path: "/login",
+		element: <Application />,
+		errorElement: <ErrorPage />,
+		children: [
+			{
+				index: true,
+				element: <Entry />,
 			},
 		],
 	},
