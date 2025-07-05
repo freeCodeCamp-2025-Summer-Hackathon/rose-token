@@ -14,6 +14,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.1.8)(react@19.1.0)
+      '@rive-app/react-canvas':
+        specifier: ^4.21.4
+        version: 4.21.4(react@19.1.0)
       '@tailwindcss/vite':
         specifier: ^4.1.10
         version: 4.1.10(vite@6.3.5(@types/node@24.0.4)(jiti@2.4.2)(lightningcss@1.30.1))
@@ -395,6 +398,14 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  '@rive-app/canvas@2.30.1':
+    resolution: {integrity: sha512-ZbEUoAGsqZWtDVCSHQ25KWHcu6sSuJxnLG1bAr0mrt40F+lZcB6pgVg5kgJBmtNqfFkJAqRykIfwHI/CvluuJQ==}
+
+  '@rive-app/react-canvas@4.21.4':
+    resolution: {integrity: sha512-DNs06qHkXERg9i+Z5YxxF6BzcT7yZNDDk7aiBWUm55qHe0XSYKr8a3vAlUokCtIKn+VBsD4ILj1TmErcgmSHAg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
 
   '@rolldown/pluginutils@1.0.0-beta.11':
     resolution: {integrity: sha512-L/gAA/hyCSuzTF1ftlzUSI/IKr2POHsv1Dd78GfqkR83KMNuswWD61JxGV2L7nRwBBBSDr6R1gCkdTmoN7W4ag==}
@@ -1677,6 +1688,13 @@ snapshots:
       react: 19.1.0
     optionalDependencies:
       '@types/react': 19.1.8
+
+  '@rive-app/canvas@2.30.1': {}
+
+  '@rive-app/react-canvas@4.21.4(react@19.1.0)':
+    dependencies:
+      '@rive-app/canvas': 2.30.1
+      react: 19.1.0
 
   '@rolldown/pluginutils@1.0.0-beta.11': {}
 
