@@ -1,22 +1,24 @@
+// Load environment variables FIRST
+require('dotenv').config();
+
 import http from 'http';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import categoryRoutes from './routes/category.routes';
 
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-
-require('dotenv').config();
 
  
 
 
 const app = express();
 const server = http.createServer(app);
-const PORT = 3000 ;
+const PORT = 3001 ;  // Changed to 3001 to avoid conflict
 
 app.use(cookieParser()); 
 app.use(express.json());
@@ -29,6 +31,7 @@ app.use(morgan('dev'));
 
 app.use("/",authRoutes);
 app.use("/", userRoutes);
+app.use("/api", categoryRoutes);
 
 
 server.listen(PORT,()=>{

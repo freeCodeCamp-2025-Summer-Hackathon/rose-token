@@ -15,10 +15,61 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  email String @unique
-  username String @unique
-  password String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String @unique
+  username  String @unique
+  password  String
+  role      String @default("user") // "user" or "admin"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  posts     Post[]
+}
 
+// Categories - Admin defined only
+model Category {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String @unique
+  description String?
+  color       String? // For UI styling (hex color)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  lessons     Lesson[]
+  posts       Post[]
+}
+
+// Mock Lesson model (for future courses)
+model Lesson {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  categoryId  String @db.ObjectId
+  tags        String[] // Up to 3 tags (validated in business logic)
+  isPublished Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+// Mock Post model (for future forum)
+model Post {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  categoryId  String @db.ObjectId
+  tags        String[] // Up to 3 tags (validated in business logic)
+  authorId    String @db.ObjectId
+  isPublished Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  category    Category @relation(fields: [categoryId], references: [id])
+  author      User @relation(fields: [authorId], references: [id])
 }
