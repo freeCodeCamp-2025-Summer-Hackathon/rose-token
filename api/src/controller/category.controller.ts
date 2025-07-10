@@ -11,6 +11,14 @@ const isAdmin = (req: Request): boolean => {
 // CREATE Category (Admin only)
 export const createCategory = async (req: Request, res: Response) => {
   try {
+    if (!isAdmin(req)) {
+      res.status(403).json({
+        success: false,
+        message: "Access denied. Admin privileges required."
+      });
+      return;
+    }
+
     const { name, description, color } = req.body;
 
     if (!name || name.trim() === "") {
@@ -107,6 +115,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
         success: false,
         message: error.message
       });
+      return;
     }
 
     res.status(500).json({
