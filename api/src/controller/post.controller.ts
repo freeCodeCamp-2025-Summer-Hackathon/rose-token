@@ -13,7 +13,7 @@ export const post = async (req: Request, res: Response) => {
     }
 }
 
-export const getPosts = async (req: Request, res: Response) => {
+export const getAllPosts = async (req: Request, res: Response) => {
     try{
         const posts = await prisma.post.findMany();
         res.status(200).json({
