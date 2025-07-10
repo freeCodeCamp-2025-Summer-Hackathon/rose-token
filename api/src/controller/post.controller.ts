@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createPost } from "../services/post.services";
+import { createPost, updatePost } from "../services/post.services";
 import prisma from "../services/prisma";
 
 export const post = async (req: Request, res: Response) => {
@@ -9,6 +9,21 @@ export const post = async (req: Request, res: Response) => {
         res.status(201).json({ post });
     } catch (error) {
         console.error("Error in /post:", error);
+        res.status(500).json({ message: error });
+    }
+}
+
+export const postUpdate = async (req: Request, res: Response) => {
+    try{
+        const {id} = req.params;
+        console.log('Post ID from params:', id); // Debug log
+        if (!id) {
+            res.status(400).json({ message: 'Post ID is required' });
+        }
+        const post = await updatePost(req.body, id);
+        res.status(200).json({post})
+    } catch (error) {
+        console.error("Error in updating your post:", error);
         res.status(500).json({ message: error });
     }
 }

@@ -47,3 +47,21 @@ export async function createPost(data: PostFormat) {
     throw error;
   }
 }
+
+export async function updatePost(updatedData: PostFormat, postid:string){
+  try{
+    const post = await prisma.post.findFirst({
+      where: {id : postid},
+    })
+    if (!post) throw new Error("Post not found")
+    const updatedPost = await prisma.post.update({
+      where: {id: postid,},
+      data: updatedData,
+    })
+    return updatedPost;
+  }catch(error){
+    console.error('Error updating post:', error);
+    throw error;
+  }
+}
+
