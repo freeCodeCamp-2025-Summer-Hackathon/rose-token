@@ -16,7 +16,7 @@ export async function createPost(data: PostFormat) {
         title,
         body,
         authorId,
-        slug: `${title.split(" ").join("-").toLowerCase()}`,
+        slug: `${title.split(" ").join("-").toLowerCase()}-${Date.now().toString(36)}`,
         createdAt: new Date(),
       },
       select: {
