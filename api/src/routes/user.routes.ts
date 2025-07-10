@@ -5,8 +5,8 @@ import { post, getAllPosts, getPostbyId, getPostbyAuthorId } from "../controller
 const router = Router();
 
 router.get("/me", me);
-router.post("/post", post)
-router.get("/all", getAllPosts)
-router.get("/postid", getPostbyId)
-router.get("/posts/author", getPostbyAuthorId)
+router.post("/posts", post)
+router.get("/posts", getAllPosts)
+router.get("/posts/:id", getPostbyId)
+router.get("/posts/author/:author", getPostbyAuthorId)
 export default router;
