@@ -10,7 +10,18 @@ interface PostFormat{
 export async function createPost(data: PostFormat) {
   try {
     const { title, body, authorId } = data;
-    console.log(data)
+    
+    const userExists = await prisma.user.findUnique({
+      where: {
+        id: authorId
+      },
+      select: {
+        id: true
+      }
+    })
+
+    if(!userExists) throw new Error("User not found");
+
     const post = await prisma.post.create({
       data: {
         title,
