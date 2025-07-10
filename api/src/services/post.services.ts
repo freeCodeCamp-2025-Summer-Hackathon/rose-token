@@ -65,3 +65,54 @@ export async function updatePost(updatedData: PostFormat, postid:string){
   }
 }
 
+export async function getAllPosts() {
+  try {
+    const posts = await prisma.post.findMany({
+      include: {
+        author: true,
+      }
+    });
+    
+    return posts;
+  } catch (error) {
+    console.error('Error fetching all posts:', error);
+    throw error;
+  }
+}
+
+export async function getPostById(postId: string) {
+  try {
+    const post = await prisma.post.findFirst({
+      where: { id: postId },
+      include: {
+        author: true,
+      }
+    });
+    
+    if (!post) {
+      throw new Error("Post not found");
+    }
+    
+    return post;
+  } catch (error) {
+    console.error('Error fetching post by ID:', error);
+    throw error;
+  }
+}
+
+export async function getPostsByAuthorId(authorId: string) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: { authorId: authorId },
+      include: {
+        author: true,
+      }
+    });
+    
+    return posts;
+  } catch (error) {
+    console.error('Error fetching posts by author ID:', error);
+    throw error;
+  }
+}
+
