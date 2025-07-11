@@ -1,3 +1,4 @@
+require('dotenv').config();
 import http from 'http';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -9,7 +10,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
-require('dotenv').config();
 
  
 
