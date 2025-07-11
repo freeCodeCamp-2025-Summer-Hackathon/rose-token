@@ -1,10 +1,10 @@
 # Node Modules
-client/node_modules/
+web/node_modules/
 api/node_modules/
 
 
 # Environment files
-client/.env
+web/.env
 api/.env
 
 # MISC

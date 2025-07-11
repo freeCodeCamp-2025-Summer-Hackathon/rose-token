@@ -2,38 +2,38 @@
 import { Request, Response } from "express";
 import { decodedId } from "../services/user.services";
 import prisma from "../services/prisma";
+import { asyncHandler } from "../utils/asyncHandler";
+import { ApiResponse } from "../utils/ApiResponse";
 
 
-export const me = async (req: Request, res: Response) => {
+export const me = asyncHandler(async (req, res) => {
 
-    try {
-        const { token } = req.cookies;
-        if (!token) {
-             res.status(401).json({ message: "No token provided" });
+    const { token } = req.cookies;
+    if (!token) {
+        return new ApiResponse(401, "No token provided").send(res);
+    }
+
+    const id = decodedId(token);
+
+    const user = await prisma.user.findUnique({
+        where: { id },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            username: true,
         }
+    });
 
-        const id = decodedId(token);
+    if (!user) {
 
-        const user = await prisma.user.findUnique({
-            where: { id },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                username: true,
-            }
-        });
-
-        if (!user) {
-             res.status(404).json({ message: "User not found" });
-        }
-
-
-         res.status(200).json({ user })
-    } catch (error) {
-        console.error("Error in /me:", error);
-         res.status(500).json({ message: error });
+        return new ApiResponse(404, "User not found").send(res);
     }
 
 
-};
+
+    return new ApiResponse(200, user).send(res);
+
+
+
+});

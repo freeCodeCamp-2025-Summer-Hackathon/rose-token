@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.services"
 import { generateToken } from "../utils/generateToken";
+import { asyncHandler } from "../utils/asyncHandler";
+import { ApiResponse } from "../utils/ApiResponse";
 
 
-export const signup = async (req: Request, res: Response) => {
-    try {
-        const user = await authService.signup(req.body);
+export const signup = asyncHandler(async(req,res)=>{
+
+const user = await authService.signup(req.body);
         const token = generateToken(user.id);
         res.cookie("token", token, {
             httpOnly: true,
@@ -13,29 +15,14 @@ export const signup = async (req: Request, res: Response) => {
             sameSite: "lax",
             maxAge: 60 * 60 * 1000,
         });
-
-        res.status(201).json({
-            message: "User SignUp successfully",
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                username: user.username,
-            },
-        });
-
-    } catch (error) {
-        console.error("Signup Error:", error);
-        res.status(500).json({
-            message: error,
-        });
-    }
-};
+ 
+      return new ApiResponse(200, { user }, "User SignUp successfully").send(res);
+});
 
 
-export const login = async (req: Request, res: Response) => {
-    try {
-        const user = await authService.login(req.body);
+export const login = asyncHandler(async(req,res)=>{
+
+  const user = await authService.login(req.body);
         const token = generateToken(user.id);
         res.cookie("token", token, {
             httpOnly: true,
@@ -44,23 +31,9 @@ export const login = async (req: Request, res: Response) => {
             maxAge: 24 * 60 * 60 * 1000,
         });
 
-        res.status(200).json({
-            message: "User login successfully",
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                username: user.username,
-            },
-        });
-
-    } catch (error) {
-        console.error("login Error:", error);
-        res.status(500).json({
-            message: error,
-        });
-    }
-};
+     
+ return new ApiResponse(200,{user},"User login successfully").send(res);
+});
 
 export const logout = async (req: Request, res: Response) => {
  
