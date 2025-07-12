@@ -33,4 +33,9 @@ model ContentFile {
   size       Int
   uploadedAt DateTime @default(now())
   uploaderId String   @db.ObjectId
+  updatedAt DateTime? @default(now())
+  updatedBy String?  @db.ObjectId
+  categoryIds String[] @db.ObjectId
+  tagIds String[] @db.ObjectId
+
 }

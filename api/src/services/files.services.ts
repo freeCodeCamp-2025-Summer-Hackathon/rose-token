@@ -11,6 +11,8 @@ export interface FileData {
 	mimetype: string;
 	size: number;
 	uploaderId: string;
+	categoryIds?: string[];
+	tagIds?: string[];
 }
 
 // Configure storage
@@ -70,12 +72,22 @@ export const handleError = (
 	) {
 		res.status(400).send(err.message);
 	}
+	console.log("sscs0", err.message);
 	res.status(500).send("An unknown error occurred when uploading.");
 };
 
 export const saveFileDataToDb = async (data: FileData) => {
 	try {
-		const { filename, originalName, path, mimetype, size, uploaderId } = data;
+		const {
+			filename,
+			originalName,
+			path,
+			mimetype,
+			size,
+			uploaderId,
+			categoryIds,
+			tagIds,
+		} = data;
 
 		const filePathInDb = path.replace(/\\/g, "/"); //----  to replace \ with /
 
@@ -87,6 +99,8 @@ export const saveFileDataToDb = async (data: FileData) => {
 				mimetype,
 				size, //---- will be in KB
 				uploaderId,
+				categoryIds: categoryIds ?? [],
+				tagIds: tagIds ?? [],
 			},
 			select: {
 				id: true,

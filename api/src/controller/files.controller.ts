@@ -31,6 +31,16 @@ export const uploadFile = async (req: Request, res: Response) => {
 		}
 		// --------------check if got file or not can letter be replace with middleware
 		const file = req.file;
+		//-----check if got catgories or tags for file
+		const categoryIds =
+			typeof req.body.categoryIds === "string"
+				? JSON.parse(req.body.categoryIds)
+				: req.body.categoryIds;
+		const tagIds =
+			typeof req.body.tagIds === "string"
+				? JSON.parse(req.body.tagIds)
+				: req.body.tagIds;
+
 		if (!file) {
 			res.status(400).send("No file uploaded.");
 			return;
@@ -56,6 +66,7 @@ export const uploadFile = async (req: Request, res: Response) => {
 			res.status(400).send("Invalid file content type!");
 			return;
 		}
+
 		// here save the file to db
 		await saveFileDataToDb({
 			filename: file.filename,
@@ -64,6 +75,8 @@ export const uploadFile = async (req: Request, res: Response) => {
 			mimetype: type.mime,
 			size: file.size,
 			uploaderId: id,
+			categoryIds,
+			tagIds,
 		});
 		// and finally
 		res.status(200).send("File uploaded successfully.");
