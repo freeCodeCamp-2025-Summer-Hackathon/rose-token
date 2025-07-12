@@ -72,7 +72,6 @@ export const handleError = (
 	) {
 		res.status(400).send(err.message);
 	}
-	console.log("sscs0", err.message);
 	res.status(500).send("An unknown error occurred when uploading.");
 };
 
