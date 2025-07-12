@@ -116,3 +116,25 @@ export async function getPostsByAuthorId(authorId: string) {
   }
 }
 
+export const deletePosts = async (postId: string)=>{
+  try{
+    
+    const post = await prisma.post.findFirst({
+      where: {id: postId}
+    })
+
+    if(!post) throw new Error ("post not found")
+
+    const deletePost = await prisma.post.update({
+      where: {id: postId},
+      data: {isDeleted: true}
+    })
+
+    return deletePost;
+  }
+  catch(error){
+    console.error('Error in deleting posts: ', error);
+    throw error;
+  }
+}
+
