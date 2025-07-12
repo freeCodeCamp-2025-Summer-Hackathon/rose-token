@@ -68,6 +68,9 @@ export async function updatePost(updatedData: PostFormat, postid:string){
 export async function getAllPosts() {
   try {
     const posts = await prisma.post.findMany({
+      where:{
+        isDeleted: false
+      },
       include: {
         author: true,
       }
@@ -83,7 +86,7 @@ export async function getAllPosts() {
 export async function getPostById(postId: string) {
   try {
     const post = await prisma.post.findFirst({
-      where: { id: postId },
+      where: { id: postId, isDeleted: false },
       include: {
         author: true,
       }
@@ -103,7 +106,7 @@ export async function getPostById(postId: string) {
 export async function getPostsByAuthorId(authorId: string) {
   try {
     const posts = await prisma.post.findMany({
-      where: { authorId: authorId },
+      where: { authorId: authorId, isDeleted: false},
       include: {
         author: true,
       }
@@ -118,7 +121,7 @@ export async function getPostsByAuthorId(authorId: string) {
 
 export const deletePosts = async (postId: string)=>{
   try{
-    
+
     const post = await prisma.post.findFirst({
       where: {id: postId}
     })
