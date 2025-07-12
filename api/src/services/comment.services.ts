@@ -1,6 +1,4 @@
-import { Request, Response } from "express";
 import prisma from "./prisma";
-import { getPostById } from "./post.services";
 
 interface CommentFormat{
     body:string,
@@ -49,13 +47,15 @@ export async function createComment(data: CommentFormat){
     }
 }
 
-export async function getAllComments(){
+export async function getAllComments(postId:string){
     try {
         const comments = await prisma.comment.findMany({
-        include: {
-            postId:true,
-            author: true,
-        }
+            where: {
+                postId: postId
+            },
+            include: {
+                post:true,
+            }
         });
         
         return comments;
@@ -65,10 +65,10 @@ export async function getAllComments(){
     }
 }
 
-export async function getCommentById(postId: string){
+export async function getCommentById(commentId: string){
     try{
         const comment = await prisma.comment.findFirst({
-            where: { postId: postId },
+            where: { id: commentId },
             include:{
                 author: true,
             }
@@ -89,6 +89,7 @@ export async function getCommentsByAuthorId(authorId: string) {
       where: { authorId: authorId },
       include: {
         author: true,
+        post:true
       }
     });
     
@@ -99,3 +100,32 @@ export async function getCommentsByAuthorId(authorId: string) {
   }
 }
 
+export async function deleteComment(commentId:string){
+    try{
+        const existingComment = await prisma.comment.findUnique({
+            where: {id: commentId},
+            select: {id: true}
+        });
+
+        if(!existingComment){
+            throw new Error("Comment not found");
+        }
+
+        const deleteComment = await prisma.comment.delete({
+            where: { id: commentId},
+            select: {
+                id: true,
+                body: true,
+                slug: true,
+                authorId: true,
+                postId: true,
+                createdAt: true,
+            }
+        });
+
+        return deleteComment
+    } catch (error){
+        console.log('Error deleting comment:', error);
+        throw error
+    }
+}
