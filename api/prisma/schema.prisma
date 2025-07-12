@@ -22,3 +22,15 @@ model User {
   password String
 
 }
+
+
+model ContentFile {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  filename   String
+  originalName String
+  path       String
+  mimetype   String
+  size       Int
+  uploadedAt DateTime @default(now())
+  uploaderId String   @db.ObjectId
+}

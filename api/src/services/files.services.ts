@@ -1,6 +1,17 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import multer, { FileFilterCallback } from "multer";
+import prisma from "./prisma";
+import { randomUUID } from "crypto";
+
+export interface FileData {
+	filename: string;
+	originalName: string;
+	path: string;
+	mimetype: string;
+	size: number;
+	uploaderId: string;
+}
 
 // Configure storage
 const storage = multer.diskStorage({
@@ -8,7 +19,8 @@ const storage = multer.diskStorage({
 		cb(null, "uploads/");
 	},
 	filename: function (req, file, cb) {
-		cb(null, Date.now() + "-" + file.originalname);
+		const uniquePrefix = Date.now() + "-" + randomUUID();
+		cb(null, uniquePrefix + "-" + file.originalname);
 	},
 });
 
@@ -59,4 +71,30 @@ export const handleError = (
 		res.status(400).send(err.message);
 	}
 	res.status(500).send("An unknown error occurred when uploading.");
+};
+
+export const saveFileDataToDb = async (data: FileData) => {
+	try {
+		const { filename, originalName, path, mimetype, size, uploaderId } = data;
+
+		const filePathInDb = path.replace(/\\/g, "/"); //----  to replace \ with /
+
+		const createdContentFile = await prisma.contentFile.create({
+			data: {
+				filename,
+				originalName,
+				path: filePathInDb,
+				mimetype,
+				size, //---- will be in KB
+				uploaderId,
+			},
+			select: {
+				id: true,
+			},
+		});
+
+		return createdContentFile;
+	} catch (error) {
+		throw error;
+	}
 };
