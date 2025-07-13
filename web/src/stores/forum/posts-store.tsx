@@ -1,9 +1,7 @@
 import type { User } from "../auth-store";
 
 export enum PostStatus {
-    UnderReview,
     Approved,
-    Answered,
     Archived,
     Deleted,
 }
@@ -53,7 +51,7 @@ export const dummyPosts: Post[] = [
             {
                 id: "c2",
                 body: "This is the second comment on the first post.",
-                status: PostStatus.UnderReview,
+                status: PostStatus.Archived,
                 author: {} as User,
                 postId: "1",
                 createdAt: new Date("2025-07-11T11:00:00Z"),
@@ -67,7 +65,7 @@ export const dummyPosts: Post[] = [
         id: "2",
         slug: "second-post",
         title: "Second Post Title",
-        status: PostStatus.Answered,
+        status: PostStatus.Approved,
         body: "This is the body of the second post.",
         author: {} as User,
         isMainPost: true,
@@ -120,7 +118,7 @@ export const dummyPosts: Post[] = [
         id: "4",
         slug: "fourth-post",
         title: "Fourth Post Title",
-        status: PostStatus.UnderReview,
+        status: PostStatus.Deleted,
         body: "This is the body of the fourth post.",
         author: {} as User,
         isMainPost: true,
