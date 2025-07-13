@@ -70,9 +70,11 @@ export const handleError = (
 		err.message ===
 		"Invalid file type, only JPEG, PNG, MP3 and WAV are allowed!"
 	) {
-		res.status(400).send(err.message);
+		res.status(400).json({ message: err.message });
 	}
-	res.status(500).send("An unknown error occurred when uploading.");
+	res
+		.status(500)
+		.json({ message: "An unknown error occurred when uploading." });
 };
 
 export const saveFileDataToDb = async (data: FileData) => {

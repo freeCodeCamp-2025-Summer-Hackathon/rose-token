@@ -42,7 +42,7 @@ export const uploadFile = async (req: Request, res: Response) => {
 				: req.body.tagIds;
 
 		if (!file) {
-			res.status(400).send("No file uploaded.");
+			res.status(400).json({ message: "No file uploaded." });
 			return;
 		}
 
@@ -63,7 +63,7 @@ export const uploadFile = async (req: Request, res: Response) => {
 		) {
 			// Delete the invalid file
 			fs.unlinkSync(filePath);
-			res.status(400).send("Invalid file content type!");
+			res.status(400).json({ message: "Invalid file content type!" });
 			return;
 		}
 
@@ -79,7 +79,7 @@ export const uploadFile = async (req: Request, res: Response) => {
 			tagIds,
 		});
 		// and finally
-		res.status(200).send("File uploaded successfully.");
+		res.status(200).json({ message: "File uploaded successfully." });
 	} catch (error: any) {
 		const filePath = req.file ? path.join("uploads", req.file.filename) : null;
 		handleError(error, res, filePath);
