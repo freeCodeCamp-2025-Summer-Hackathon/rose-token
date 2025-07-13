@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createComment, getCommentsByAuthorId, getAllComments, getCommentById, deleteComment } from "../services/comment.services";
+import { createComment, getCommentsByAuthorId, getAllComments, getCommentById, deleteComment, updateComment } from "../services/comment.services";
 
 export const comment = async (req: Request, res: Response) => {
     try{
@@ -86,4 +86,22 @@ export const deleteCommentById = async ( req: Request, res: Response) => {
         message: "Failed to fetch comment by author id"
         });
     }
+}
+
+export const patchComment = async ( req: Request, res: Response) => {
+  try{
+      const { id, body } = req.params;
+      const patchComment = await updateComment(id, body);
+      res.status(200).json({
+      status: true,
+      message: "comment successfully fetched by author id",
+      data: patchComment,
+    });
+  } catch (error) {
+      console.error("Error fetching comment:", error);
+      res.status(500).json({
+      status: false,
+      message: "Failed to fetch comment by author id"
+    });
+  }     
 }

@@ -77,6 +77,8 @@ export async function getCommentById(commentId: string){
         if(!comment){
             throw new Error("Post doesn't exist")
         }
+
+        return comment;
     } catch (error){
         console.error("Error fetching comment by post ID:", error);
         throw error;
@@ -128,4 +130,37 @@ export async function deleteComment(commentId:string){
         console.log('Error deleting comment:', error);
         throw error
     }
+}
+
+export async function updateComment(commentId:string, newBody:string){
+    try{
+        const existingComment = await prisma.comment.findUnique({
+            where: { id: commentId },
+            select: { id: true }
+        });
+
+        if(!existingComment) throw new Error("Comment doesn't exist!");
+
+        const updateComment = await prisma.comment.update({
+            where: { id: commentId},
+            data: { 
+                body:newBody,
+                slug: `${newBody.split(" ").join("-").toLowerCase()}-${Date.now().toString(36)}`
+            },
+             select: {
+                id: true,
+                body: true,
+                slug: true,
+                authorId: true,
+                postId: true,
+                createdAt: true
+            };
+        });
+
+        return updateComment;
+    } catch (error){
+        console.error("Error fetching comment by post ID:", error);
+        throw error;
+    }
+
 }
