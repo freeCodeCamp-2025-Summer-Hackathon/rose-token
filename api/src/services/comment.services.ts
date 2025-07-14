@@ -1,18 +1,18 @@
 import prisma from "./prisma";
 
 interface CommentFormat{
-    body:string,
-    authorId:string,
+    comment:string,
+    author:string,
     postId:string
 }
 
 export async function createComment(data: CommentFormat){
     try{
-        const { body, authorId, postId} = data;
+        const { comment, author, postId} = data;
 
         const userExists = await prisma.user.findUnique({
         where: {
-            id: authorId
+            id: author
         },
         select: {
             id: true
@@ -21,22 +21,17 @@ export async function createComment(data: CommentFormat){
 
         if(!userExists) throw new Error("User not found");
 
-        const comment = await prisma.comment.create({
+        const createComment = await prisma.comment.create({
             data: {
-                body,
-                authorId,
+                comment,
                 postId,
-                slug: `${body.split(" ").join("-").toLowerCase()}-${Date.now().toString(36)}`,
-                createdAt: new Date(),
+                date: new Date(),
             },
             select: {
                 id: true,
-                body: true,
-                slug: true,
+                comment: true,
                 postId: true,
-                author: true,
-                createdAt: true,
-                authorId: true,
+                date: true,
             }
         })
 
@@ -65,43 +60,6 @@ export async function getAllComments(postId:string){
     }
 }
 
-export async function getCommentById(commentId: string){
-    try{
-        const comment = await prisma.comment.findFirst({
-            where: { id: commentId },
-            include:{
-                author: true,
-            }
-        })
-
-        if(!comment){
-            throw new Error("Post doesn't exist")
-        }
-
-        return comment;
-    } catch (error){
-        console.error("Error fetching comment by post ID:", error);
-        throw error;
-    }
-}
-
-export async function getCommentsByAuthorId(authorId: string) {
-  try {
-    const comments = await prisma.comment.findMany({
-      where: { authorId: authorId },
-      include: {
-        author: true,
-        post:true
-      }
-    });
-    
-    return comments;
-  } catch (error) {
-    console.error('Error fetching comments by author ID:', error);
-    throw error;
-  }
-}
-
 export async function deleteComment(commentId:string){
     try{
         const existingComment = await prisma.comment.findUnique({
@@ -117,11 +75,9 @@ export async function deleteComment(commentId:string){
             where: { id: commentId},
             select: {
                 id: true,
-                body: true,
-                slug: true,
-                authorId: true,
+                comment: true,
                 postId: true,
-                createdAt: true,
+                date: true,
             }
         });
 
@@ -132,7 +88,7 @@ export async function deleteComment(commentId:string){
     }
 }
 
-export async function updateComment(commentId:string, newBody:string){
+export async function updateComment(commentId:string, newComment:string){
     try{
         const existingComment = await prisma.comment.findUnique({
             where: { id: commentId },
@@ -144,17 +100,15 @@ export async function updateComment(commentId:string, newBody:string){
         const updateComment = await prisma.comment.update({
             where: { id: commentId},
             data: { 
-                body:newBody,
-                slug: `${newBody.split(" ").join("-").toLowerCase()}-${Date.now().toString(36)}`
+                comment:newComment,
+                date: new Date()
             },
-             select: {
+            select: {
                 id: true,
-                body: true,
-                slug: true,
-                authorId: true,
+                comment: true,
                 postId: true,
-                createdAt: true
-            };
+                date:true
+            }
         });
 
         return updateComment;
@@ -164,3 +118,41 @@ export async function updateComment(commentId:string, newBody:string){
     }
 
 }
+
+
+// export async function getCommentById(commentId: string){
+//     try{
+//         const comment = await prisma.comment.findFirst({
+//             where: { id: commentId },
+//             include:{
+//                 author: true,
+//             }
+//         })
+
+//         if(!comment){
+//             throw new Error("Post doesn't exist")
+//         }
+
+//         return comment;
+//     } catch (error){
+//         console.error("Error fetching comment by post ID:", error);
+//         throw error;
+//     }
+// }
+
+// export async function getCommentsByAuthorId(authorId: string) {
+//   try {
+//     const comments = await prisma.comment.findMany({
+//       where: { authorId: authorId },
+//       include: {
+//         author: true,
+//         post:true
+//       }
+//     });
+    
+//     return comments;
+//   } catch (error) {
+//     console.error('Error fetching comments by author ID:', error);
+//     throw error;
+//   }
+// }
