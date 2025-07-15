@@ -10,9 +10,9 @@ export async function createComment(data: CommentFormat){
     try{
         const { comment, author, postId} = data;
 
-        const userExists = await prisma.user.findUnique({
+        const userExists = await prisma.post.findUnique({
         where: {
-            id: author
+            id: postId
         },
         select: {
             id: true
@@ -32,10 +32,11 @@ export async function createComment(data: CommentFormat){
                 comment: true,
                 postId: true,
                 date: true,
+                post: true
             }
         })
 
-        return comment;
+        return createComment;
     } catch (error){
         console.log('Error creating comment:', error);
         throw error
@@ -67,9 +68,7 @@ export async function deleteComment(commentId:string){
             select: {id: true}
         });
 
-        if(!existingComment){
-            throw new Error("Comment not found");
-        }
+        if(!existingComment) throw new Error("Comment not found");
 
         const deleteComment = await prisma.comment.delete({
             where: { id: commentId},
@@ -118,41 +117,3 @@ export async function updateComment(commentId:string, newComment:string){
     }
 
 }
-
-
-// export async function getCommentById(commentId: string){
-//     try{
-//         const comment = await prisma.comment.findFirst({
-//             where: { id: commentId },
-//             include:{
-//                 author: true,
-//             }
-//         })
-
-//         if(!comment){
-//             throw new Error("Post doesn't exist")
-//         }
-
-//         return comment;
-//     } catch (error){
-//         console.error("Error fetching comment by post ID:", error);
-//         throw error;
-//     }
-// }
-
-// export async function getCommentsByAuthorId(authorId: string) {
-//   try {
-//     const comments = await prisma.comment.findMany({
-//       where: { authorId: authorId },
-//       include: {
-//         author: true,
-//         post:true
-//       }
-//     });
-    
-//     return comments;
-//   } catch (error) {
-//     console.error('Error fetching comments by author ID:', error);
-//     throw error;
-//   }
-// }
