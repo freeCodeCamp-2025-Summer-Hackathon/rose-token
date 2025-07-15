@@ -22,3 +22,39 @@ model User {
   password String
 
 }
+
+enum Category {
+  GRAMMAR
+  VOCABULARY
+  SPEAKING
+  LISTENING
+  WRITING
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id            Int            @id @default(autoincrement())
+  title         String
+  content       String?
+  course        Course         @relation(fields: [courseId], references: [id])
+  courseId      Int
+  contributions Contribution[]
+}
+
+model Contribution {
+  id         Int       @id @default(autoincrement())
+  title      String
+  content    String
+  category   Category
+  tags       String[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  lesson     Lesson    @relation(fields: [lessonId], references: [id])
+  lessonId   Int
+}
