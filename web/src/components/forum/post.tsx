@@ -1,6 +1,6 @@
 import {ChatCircleTextIcon} from "@phosphor-icons/react"
 import { type Post } from "@/stores/forum/posts-store"
-import CommentsSection from './forum/comment';
+import CommentsSection from '@/components/forum/comment';
 import { formatDate } from "@/lib/utils";
 
 interface PostProps{
