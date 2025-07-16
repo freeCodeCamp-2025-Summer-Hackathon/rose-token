@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import { asyncHandler } from "./asyncHandler";
-import { ApiError } from "./ApiError";
+import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/ApiError";
 import { decodedId } from "../services/user.services";
 import prisma from "../services/prisma";
 
