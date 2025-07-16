@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createPost, getAllPosts, getPostById, getPostsByAuthorId, updatePost } from "../services/post.services";
+import { createPost, getAllPosts, getPostById, getPostsByAuthorId, updatePost, deletePosts } from "../services/post.services";
 import prisma from "../services/prisma";
 
 export const post = async (req: Request, res: Response) => {
@@ -80,5 +80,25 @@ export const postsbyAuthorId = async ( req: Request, res: Response) => {
       status: false,
       message: "Failed to fetch posts by author id"
     });
+  }
+}
+
+export const deletePostsbyId = async (req: Request, res: Response) =>{
+  try{
+    const {id} = req.params;
+    //console.log(id) //for debugging 
+    
+    const post = await deletePosts(id);
+    res.status(200).json({
+      status: true,
+      message: "post deleted successfully",
+      data: post
+    })
+  }
+  catch(error){
+    res.status(500).json({
+      status: false,
+      message: "Failed to delete the post"
+    })
   }
 }
