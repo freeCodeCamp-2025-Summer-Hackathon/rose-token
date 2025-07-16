@@ -1,6 +1,6 @@
 import {ChatCircleTextIcon} from "@phosphor-icons/react"
 import { type Post } from "@/stores/forum/posts-store"
-import CommentsSection from './comment';
+import CommentsSection from '../comment';
 import { formatDate } from "@/lib/utils";
 
 interface PostProps{
@@ -14,7 +14,7 @@ const AddCommentButton = () => (
   </div>
 );
 
-const PostMetadata = ({ post}: PostProps) => (
+export const PostMetadata = ({ post}: PostProps) => (
   <div className="flex gap-4 text-sm">
     <span className="text-blue-300">{post.author?.name}</span>
     <span className="text-zinc-500">Created {formatDate(post.createdAt)}</span>

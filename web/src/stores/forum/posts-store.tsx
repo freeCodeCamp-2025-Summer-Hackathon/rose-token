@@ -23,7 +23,7 @@ export interface Post {
     status: PostStatus,
     body: string,
     author: User,
-    isMainPost: Boolean,
+    isMainPost: boolean,
     comments: Comment[],
     createdAt: Date,
     updatedAt: Date,
