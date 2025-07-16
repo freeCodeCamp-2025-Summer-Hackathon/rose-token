@@ -11,4 +11,5 @@ router.get("/posts/:id", postbyId)
 router.get("/posts/author/:author", postsbyAuthorId)
 router.patch("/posts/:id", postUpdate)
 
+
 export default router;
