@@ -21,6 +21,7 @@ model User {
   username String @unique
   password String
   posts   Post[]
+  comments Comment[]
 }
 
 model Post {
@@ -28,7 +29,7 @@ model Post {
   slug      String    
   title     String
   body      String
-  status    PostStatus @default(APPROVED)
+  status    Status @default(APPROVED)
   isMainPost Boolean
   author    User      @relation(fields: [authorId], references: [id])
   authorId  String    @db.ObjectId
@@ -38,7 +39,7 @@ model Post {
   // isDeleted Boolean @default(false)
 }
 
-enum PostStatus {
+enum Status {
   DELETED
   APPROVED
   ARCHIVED
@@ -47,8 +48,10 @@ enum PostStatus {
 model Comment {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   comment String
+  status    Status @default(APPROVED)
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String    @db.ObjectId
   date     DateTime
   post    Post   @relation(fields: [postId], references: [id])
   postId  String @db.ObjectId
 }
-

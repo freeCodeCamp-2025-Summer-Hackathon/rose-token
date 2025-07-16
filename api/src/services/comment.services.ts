@@ -2,27 +2,35 @@ import prisma from "./prisma";
 
 interface CommentFormat{
     comment:string,
-    author:string,
+    postId:string,
+    authorId: string
+}
+
+interface UpdateCommentFormat{
+    id: string,
+    comment:string,
+    authorId:string,
     postId:string
 }
 
 export async function createComment(data: CommentFormat){
     try{
-        const { comment, author, postId} = data;
+        const { comment, postId, authorId} = data;
 
-        const userExists = await prisma.post.findUnique({
-        where: {
-            id: postId
-        },
-        select: {
-            id: true
-        }
+        const userExists = await prisma.user.findUnique({
+            where: {
+                id: authorId
+            },
+            select: {
+                id: true
+            }
         })
 
         if(!userExists) throw new Error("User not found");
 
         const createComment = await prisma.comment.create({
             data: {
+                authorId,
                 comment,
                 postId,
                 date: new Date(),
@@ -87,33 +95,42 @@ export async function deleteComment(commentId:string){
     }
 }
 
-export async function updateComment(commentId:string, newComment:string){
+export async function updateComment(data: UpdateCommentFormat){
     try{
-        const existingComment = await prisma.comment.findUnique({
-            where: { id: commentId },
-            select: { id: true }
-        });
+        const { comment, authorId, postId, id} = data;
 
-        if(!existingComment) throw new Error("Comment doesn't exist!");
+        const userExists = await prisma.user.findUnique({
+            where: {
+                id: authorId,
+            },
+            select: {
+                id: true
+            }
+        })
+
+        if(!userExists) throw new Error("User not found");
 
         const updateComment = await prisma.comment.update({
-            where: { id: commentId},
-            data: { 
-                comment:newComment,
-                date: new Date()
+            where: {
+                id: id
+            },
+            data: {
+                comment,
+                postId,
+                date: new Date(),
             },
             select: {
                 id: true,
                 comment: true,
                 postId: true,
-                date:true
+                date: true,
+                post: true
             }
-        });
+        })
 
         return updateComment;
     } catch (error){
-        console.error("Error fetching comment by post ID:", error);
-        throw error;
+        console.log('Error creating comment:', error);
+        throw error
     }
-
 }

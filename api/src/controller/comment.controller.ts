@@ -7,7 +7,7 @@ export const comment = async (req: Request, res: Response) => {
         console.log(comment);
         res.status(201).json({ comment });
     } catch (error) {
-        console.error("Error in /comment:", error);
+        console.error("Error in /posts/:id/comments:", error);
         res.status(500).json({ message: error });
     }
 }
@@ -52,8 +52,8 @@ export const deleteCommentById = async ( req: Request, res: Response) => {
 
 export const patchComment = async ( req: Request, res: Response) => {
   try{
-      const { id, body } = req.params;
-      const patchComment = await updateComment(id, body);
+      const { id, comment } = req.params;
+      const patchComment = await updateComment(req.body);
       res.status(200).json({
       status: true,
       message: "comment successfully fetched by author id",
