@@ -73,7 +73,7 @@ export const login = async (data:LoginInput)=>{
 
 const { email, password } = parsed.data;
 
-    const user= await prisma.user.findUnique({where:{email}});
+  const user= await prisma.user.findUnique({where:{email}});
 
   if (!user) {
       throw new ApiError(401,"Invalid email or password");

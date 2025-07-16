@@ -1,4 +1,3 @@
-
 import { Request, Response } from "express";
 import { decodedId } from "../services/user.services";
 import prisma from "../services/prisma";
