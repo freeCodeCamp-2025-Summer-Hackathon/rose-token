@@ -21,30 +21,20 @@ model User {
   username      String @unique
   password      String
   role          String @default("user")  //user or admin
-  userCourses   UserCourse[]
+  userLanguages UserLanguage[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
 }
 
-model Course {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  description   String
-  userCourses   UserCourse[]
-  language      Language?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model UserCourse {
+model UserLanguage {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
 
   user          User     @relation(fields: [userId], references: [id])
   userId        String   @db.ObjectId
 
-  course        Course   @relation(fields: [courseId], references: [id])
-  courseId      String   @db.ObjectId
+  language      Language @relation(fields: [languageId], references: [id])
+  languageId    String   @db.ObjectId
 
   joinedAt      DateTime @default(now())
 }
@@ -54,9 +44,9 @@ model Language {
   code            String  
   name            String  
   description     String  
-  course          Course @relation(fields: [courseId], references: [id])
-  courseId        String @unique @db.ObjectId
   joinedCount     Int   
   completedCount  Int  
-  
+  userLanguages   UserLanguage[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
