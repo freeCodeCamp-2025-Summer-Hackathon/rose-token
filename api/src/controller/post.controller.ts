@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createPost, getAllPosts, getPostById, getPostsByAuthorId, updatePost, deletePosts } from "../services/post.services";
+import { createPost, updatePost, createPostbySlug, getAllMainPosts, getRelatedPosts, deletePosts } from "../services/post.services";
 import prisma from "../services/prisma";
 
 export const post = async (req: Request, res: Response) => {
@@ -28,58 +28,44 @@ export const postUpdate = async (req: Request, res: Response) => {
     }
 }
 
-export const allPosts = async (req: Request, res: Response) => {
-  try {
-    const posts = await getAllPosts();
-    res.status(200).json({
-      status: true,
-      message: "posts successfully fetched",
-      data: posts,
-    });
-  } catch (error) {
-    console.error("Error fetching posts:", error);
+export const postbySlug = async(req: Request, res: Response) => {
+  try{
+    const {slug} = req.params;
+    const post = await createPostbySlug(slug, req.body);
+    res.status(201).json({post})
+  }
+  catch(error){
     res.status(500).json({
       status: false,
-      message: "Failed to fetch posts"
-    });
+      message: "Failed to create post"
+    })
   }
 }
 
-export const postbyId = async ( req: Request, res: Response) => {
-    try {
-    const { postId } = req.params;
-    const post = await getPostById(postId);
-    
-    res.status(200).json({
-      status: true,
-      message: "post successfully fetched by id",
-      data: post,
-    });
-  } catch (error) {
-    console.error("error fetching post:", error);
-    res.status(500).json({
+export const getMainPosts = async(request: Request, response: Response) => {
+  try{
+    const posts = await getAllMainPosts();
+    response.status(200).json({posts})
+  }
+  catch(error){
+    response.status(500).json({
       status: false,
-      message: "Failed to fetch post by id"
-    });
+      message: "couldnt fetch main posts"
+    })
   }
 }
 
-export const postsbyAuthorId = async ( req: Request, res: Response) => {
-    try {
-    const { id } = req.params;
-    const posts = await getPostsByAuthorId(id);
-    
-    res.status(200).json({
-      status: true,
-      message: "posts successfully fetched by author id",
-      data: posts,
-    });
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    res.status(500).json({
+export const getDiscussionPosts = async(request: Request, response: Response) => {
+  try{
+    const {slug} = request.params;
+    const posts = await getRelatedPosts(slug)
+    response.status(200).json({posts})
+  }
+  catch(error){
+    response.status(500).json({
       status: false,
-      message: "Failed to fetch posts by author id"
-    });
+      message: "Failed to fetch discussion"
+    })
   }
 }
 
