@@ -15,7 +15,7 @@ router.patch("/posts/:id", postUpdate)
 router.get("/posts/:id/comments", allComment)
 router.post("/posts/:id/comments", comment)
 router.patch("/posts/:id/comments/:id", patchComment)
-router.delete("/posts/:id/comments/:id", deleteCommentById)
+router.delete("/posts/:id/comments/:id/delete", deleteCommentById)
 
 
 export default router;
