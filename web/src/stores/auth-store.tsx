@@ -1,9 +1,8 @@
 import { create } from "zustand";
 
-//--------------type for User
 export type User = { name: string; email: string } | null;
 
-// ---------------interface for Auth Store
+
 interface AuthState {
 	user: User;
 	setUser: (userData: User) => void;
@@ -17,7 +16,7 @@ interface AuthState {
 	isLoading: boolean;
 	setIsLoading: (isLoadingValue: boolean) => void;
 }
-// --------------- Auth Store
+
 
 export const useAuthStore = create<AuthState>((set) => ({
 	user: null,
@@ -28,10 +27,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 		set({ isAuthenticated: isAuthenticated }),
 
 	login: (userData: User) => {
-		set({ user: userData, isAuthenticated: true }); // adding user data into store
+		set({ user: userData, isAuthenticated: true }); 
 	},
 	logout: () => {
-		set({ user: null, isAuthenticated: false }); // removing stored user data
+		set({ user: null, isAuthenticated: false }); 
 	},
 
 	isLoading: false,
