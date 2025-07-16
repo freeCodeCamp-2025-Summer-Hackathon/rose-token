@@ -4,7 +4,7 @@ import CommentsSection from '@/components/forum/comment';
 import { formatDate } from "@/lib/utils";
 
 interface PostProps{
-    post: Post;
+  post: Post;
 }
 
 const AddCommentButton = () => (
@@ -16,9 +16,9 @@ const AddCommentButton = () => (
 
 const PostMetadata = ({ post}: PostProps) => (
   <div className="flex gap-4 text-sm">
-    <span className="text-blue-300">{post.author?.name}</span>
-    <span className="text-zinc-500">Created {formatDate(post.createdAt)}</span>
-    <span className="text-zinc-500">Modified {formatDate(post.updatedAt)}</span>
+    <span className="text-blue-300">{post.author.name}</span>
+    <span className="text-zinc-500">Created {new Date(post.createdAt).toLocaleDateString()}</span>
+    <span className="text-zinc-500">Modified {new Date(post.updatedAt).toLocaleDateString()}</span>
   </div>
 );
 
