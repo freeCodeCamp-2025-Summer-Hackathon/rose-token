@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/utils";
 import { type Comment } from "@/stores/forum/posts-store"
 
 function Comment( { comment }: { comment: Comment }) {
@@ -6,7 +7,7 @@ function Comment( { comment }: { comment: Comment }) {
         <p className="mb-2">{comment.comment}</p>
         <small className="text-gray-500 flex gap-4">
             <span className="text-blue-300">{comment.author.name}</span>
-            <span>{new Date(comment.createdAt).toLocaleDateString() }</span>
+            <span>Created {formatDate(new Date(comment.date))}</span>
         </small>
       </div>
     );

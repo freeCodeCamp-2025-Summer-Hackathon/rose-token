@@ -12,8 +12,7 @@ export interface Comment {
     status: PostStatus,
     author: NonNullable<User> ,
     postId: string,
-    createdAt: Date,
-    updatedAt: Date,
+    date: Date,
 }
 
 export interface Post {
