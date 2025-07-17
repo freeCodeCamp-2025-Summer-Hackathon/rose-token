@@ -14,7 +14,7 @@ const AddCommentButton = () => (
   </div>
 );
 
-const PostMetadata = ({ post}: PostProps) => (
+export const PostMetadata = ({ post}: PostProps) => (
   <div className="flex gap-4 text-sm">
     <span className="text-blue-300">{post.author.name}</span>
     <span className="text-zinc-500">Created {new Date(post.createdAt).toLocaleDateString()}</span>

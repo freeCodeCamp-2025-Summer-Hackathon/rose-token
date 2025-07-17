@@ -9,3 +9,4 @@ api/.env
 
 # MISC
 *.log
+web/package-lock.json
