@@ -39,11 +39,14 @@ export function Post ({ post }: PostProps){
 };
 
 export function Replies({ replyPosts }: { replyPosts: Post[] }){
-  if (replyPosts.length === 0) return null;
+  const number = replyPosts.length
+  if (number === 0) return null;
   
   return (
     <section className="mt-12">
-      <h2 className="text-2xl font-bold mb-6">{replyPosts.length} Replies</h2>
+      <h2 className="text-2xl font-bold mb-6">
+        {number > 1 ? `${number} Answers` : `${number} Answer` }
+        </h2>
       {replyPosts.map(post => (
         <Post key={post.id} post={post} />
       ))}
