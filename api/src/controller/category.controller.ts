@@ -1,24 +1,10 @@
 import { Request, Response } from "express";
 import * as categoryService from "../services/category.services";
-
-// Helper function to check if user is admin
-const isAdmin = (req: Request): boolean => {
-  // TODO: Implement proper admin check from JWT token
-  // For now, we'll assume admin check is done in middleware
-  return true; // Placeholder
-};
+import { AuthenticatedRequest } from "../middleware/auth.middleware";
 
 // CREATE Category (Admin only)
-export const createCategory = async (req: Request, res: Response) => {
+export const createCategory = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    if (!isAdmin(req)) {
-      res.status(403).json({
-        success: false,
-        message: "Access denied. Admin privileges required."
-      });
-      return;
-    }
-
     const { name, description, color } = req.body;
 
     if (!name || name.trim() === "") {
@@ -40,7 +26,6 @@ export const createCategory = async (req: Request, res: Response) => {
       message: "Category created successfully",
       data: category
     });
-
   } catch (error) {
     console.error("Create Category Error:", error);
     
@@ -58,8 +43,8 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 };
 
-// GET All Categories
-export const getAllCategories = async (req: Request, res: Response) => {
+// GET All Categories (Public)
+export const getAllCategories = async (req: Request, res: Response): Promise<void> => {
   try {
     const { search } = req.query;
 
@@ -76,18 +61,17 @@ export const getAllCategories = async (req: Request, res: Response) => {
       data: categories,
       count: categories.length
     });
-
   } catch (error) {
     console.error("Get Categories Error:", error);
     res.status(500).json({
       success: false,
-      message: "Something went wrong while fetching categories"
+      message: "Something went wrong while retrieving categories"
     });
   }
 };
 
-// GET Single Category by ID
-export const getCategoryById = async (req: Request, res: Response) => {
+// GET Category by ID (Public)
+export const getCategoryById = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
@@ -101,41 +85,31 @@ export const getCategoryById = async (req: Request, res: Response) => {
 
     const category = await categoryService.getCategoryById(id);
 
+    if (!category) {
+      res.status(404).json({
+        success: false,
+        message: "Category not found"
+      });
+      return;
+    }
+
     res.status(200).json({
       success: true,
       message: "Category retrieved successfully",
       data: category
     });
-
   } catch (error) {
     console.error("Get Category Error:", error);
-    
-    if (error instanceof Error) {
-      res.status(404).json({
-        success: false,
-        message: error.message
-      });
-      return;
-    }
-
     res.status(500).json({
       success: false,
-      message: "Something went wrong while fetching category"
+      message: "Something went wrong while retrieving category"
     });
   }
 };
 
 // UPDATE Category (Admin only)
-export const updateCategory = async (req: Request, res: Response) => {
+export const updateCategory = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    if (!isAdmin(req)) {
-      res.status(403).json({
-        success: false,
-        message: "Access denied. Admin privileges required."
-      });
-      return;
-    }
-
     const { id } = req.params;
     const { name, description, color } = req.body;
 
@@ -147,28 +121,33 @@ export const updateCategory = async (req: Request, res: Response) => {
       return;
     }
 
-    // Create update object with only provided fields
-    const updateData: any = {};
-    if (name !== undefined) updateData.name = name.trim();
-    if (description !== undefined) updateData.description = description?.trim();
-    if (color !== undefined) updateData.color = color;
-
-    if (Object.keys(updateData).length === 0) {
+    if (!name || name.trim() === "") {
       res.status(400).json({
         success: false,
-        message: "At least one field is required for update"
+        message: "Category name is required"
       });
       return;
     }
 
-    const category = await categoryService.updateCategory(id, updateData);
+    const category = await categoryService.updateCategory(id, {
+      name: name.trim(),
+      description: description?.trim(),
+      color
+    });
+
+    if (!category) {
+      res.status(404).json({
+        success: false,
+        message: "Category not found"
+      });
+      return;
+    }
 
     res.status(200).json({
       success: true,
       message: "Category updated successfully",
       data: category
     });
-
   } catch (error) {
     console.error("Update Category Error:", error);
     
@@ -187,16 +166,8 @@ export const updateCategory = async (req: Request, res: Response) => {
 };
 
 // DELETE Category (Admin only)
-export const deleteCategory = async (req: Request, res: Response) => {
+export const deleteCategory = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    if (!isAdmin(req)) {
-      res.status(403).json({
-        success: false,
-        message: "Access denied. Admin privileges required."
-      });
-      return;
-    }
-
     const { id } = req.params;
 
     if (!id) {
@@ -207,97 +178,98 @@ export const deleteCategory = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await categoryService.deleteCategory(id);
+    const deleted = await categoryService.deleteCategory(id);
+
+    if (!deleted) {
+      res.status(404).json({
+        success: false,
+        message: "Category not found"
+      });
+      return;
+    }
 
     res.status(200).json({
       success: true,
-      message: result.message
+      message: "Category deleted successfully"
     });
-
   } catch (error) {
     console.error("Delete Category Error:", error);
-    
-    if (error instanceof Error) {
-      res.status(400).json({
-        success: false,
-        message: error.message
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: "Something went wrong while deleting category"
-      });
-    }
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong while deleting category"
+    });
   }
 };
 
-// GET /api/categories/lessons/filter - Filter lessons by category and tags
-export const getFilteredLessonsController = async (req: Request, res: Response) => {
+// GET Filtered Lessons (Public)
+export const getFilteredLessonsController = async (req: Request, res: Response): Promise<void> => {
   try {
     const { categoryId, tags, searchTerm } = req.query;
-    
-    const filters = {
+
+    const lessons = await categoryService.getFilteredLessons({
       categoryId: categoryId as string,
-      tags: tags ? (tags as string).split(',').map(tag => tag.trim()) : undefined,
+      tags: tags ? (Array.isArray(tags) ? tags as string[] : [tags as string]) : undefined,
       searchTerm: searchTerm as string
-    };
-    
-    const lessons = await categoryService.getFilteredLessons(filters);
-    
+    });
+
     res.status(200).json({
       success: true,
+      message: "Lessons retrieved successfully",
       data: lessons,
-      message: "Lessons filtered successfully"
+      count: lessons.length
     });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Get Filtered Lessons Error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Error filtering lessons"
+      message: "Something went wrong while retrieving lessons"
     });
   }
 };
 
-// GET /api/categories/posts/filter - Filter posts by category and tags
-export const getFilteredPostsController = async (req: Request, res: Response) => {
+// GET Filtered Posts (Public)
+export const getFilteredPostsController = async (req: Request, res: Response): Promise<void> => {
   try {
     const { categoryId, tags, searchTerm, authorId } = req.query;
-    
-    const filters = {
+
+    const posts = await categoryService.getFilteredPosts({
       categoryId: categoryId as string,
-      tags: tags ? (tags as string).split(',').map(tag => tag.trim()) : undefined,
+      tags: tags ? (Array.isArray(tags) ? tags as string[] : [tags as string]) : undefined,
       searchTerm: searchTerm as string,
       authorId: authorId as string
-    };
-    
-    const posts = await categoryService.getFilteredPosts(filters);
-    
+    });
+
     res.status(200).json({
       success: true,
+      message: "Posts retrieved successfully",
       data: posts,
-      message: "Posts filtered successfully"
+      count: posts.length
     });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Get Filtered Posts Error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Error filtering posts"
+      message: "Something went wrong while retrieving posts"
     });
   }
 };
 
-// GET /api/categories/tags - Get all unique tags
-export const getAllTagsController = async (req: Request, res: Response) => {
+// GET All Tags (Public)
+export const getAllTagsController = async (req: Request, res: Response): Promise<void> => {
   try {
     const tags = await categoryService.getAllTags();
-    
+
     res.status(200).json({
       success: true,
+      message: "Tags retrieved successfully",
       data: tags,
-      message: "Tags retrieved successfully"
+      count: tags.length
     });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Get Tags Error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Error retrieving tags"
+      message: "Something went wrong while retrieving tags"
     });
   }
 };
