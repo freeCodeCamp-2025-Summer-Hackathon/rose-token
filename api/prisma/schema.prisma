@@ -22,3 +22,32 @@ model User {
   password String
 
 }
+
+enum ProgressType {
+  lesson
+  exercise
+}
+
+enum ProgressStatus {
+  
+  in_progress
+  completed
+}
+
+
+model UserProgress {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  progressOf ProgressType // lesson or exercise
+ progressStatus ProgressStatus // in progress, completed
+ // in future may add progressPercent
+  lessonId String? @db.ObjectId
+  exerciseId String? @db.ObjectId
+  createdAt DateTime @default(now())
+  createdBy String  @db.ObjectId
+  updatedAt DateTime @default(now())
+  updatedBy String  @db.ObjectId
+
+  
+  
+}
