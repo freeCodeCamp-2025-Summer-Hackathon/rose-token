@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Post } from "@/stores/forum/posts-store";
 import { PostMetadata } from "./post";
+import { Link } from "react-router";
 
 const renderPost = (post: Post): ReactNode => {
     return (
@@ -8,7 +9,7 @@ const renderPost = (post: Post): ReactNode => {
             <h2 className="text-3xl font-bold mb-4">{post.title}</h2>
             <PostMetadata post={post} />
             <p className='mt-8 mb-12 line-clamp-1'>{post.body}</p>
-        </article>
+        </article>   
     );
 }
 
@@ -20,7 +21,11 @@ interface PostListProps{
 const PostList = ({ posts = [] }: PostListProps) => {
     return posts.length > 0 ? (
         <div>
-            {posts.map((post: Post) => renderPost(post))}
+            {posts.map((post: Post) => 
+            <Link to={`/forum/posts/${post.slug}`}>
+                {renderPost(post)}
+            </Link> 
+            )}
         </div>
     ) : (
         <div>

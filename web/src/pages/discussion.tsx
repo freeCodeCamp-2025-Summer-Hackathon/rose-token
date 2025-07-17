@@ -1,22 +1,25 @@
-import { dummyPosts } from "@/stores/forum/posts-store"
-import { Post, Replies } from "@/components/forum/post";
-import { Sidebar } from "@/components/sidebar";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { type Post } from "@/stores/forum/posts-store"
+import { Sidebar } from "@/components/forum/sidebar";
 import PostList from "@/components/forum/post-list";
 
-export const Discussion = () => {
-  // const mainPost = dummyPosts.find(post => post.isMainPost);
-  // const replyPosts = dummyPosts.filter(post => !post.isMainPost);
+export const Forum = () => {
+  const [posts, setPosts] = useState<Post[]>([]); 
+  
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await axios.get(`http://localhost:3000/posts`);
+      setPosts(response.data.posts);
+    };
+
+    fetchPosts();
+  }, []); 
 
   return (
-    <section className="flex justify-between mt-16 p-2">
+    <section className="flex gap-4 justify-between mt-16 p-2">
       <Sidebar />
-      {/* <section className="flex-grow">
-        <div className="w-3/4 px-12">
-          {mainPost && <Post post={mainPost} />}
-          <Replies replyPosts={replyPosts} />
-        </div>
-      </section> */}
-      <PostList posts={dummyPosts}/>
+      <PostList posts={posts}/>
     </section>
   );
 };
