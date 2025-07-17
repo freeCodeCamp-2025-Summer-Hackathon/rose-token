@@ -9,22 +9,22 @@ import {
   getFilteredPostsController,
   getAllTagsController
 } from "../controller/category.controller";
+import { authenticateToken, requireAdmin } from "../middleware/auth.middleware";
 
-const router=Router();
+const router = Router();
 
-router.post("/categories", createCategory);
+// Admin routes - require authentication and admin privileges
+router.post("/categories", authenticateToken, requireAdmin, createCategory);
+router.put("/categories/:id", authenticateToken, requireAdmin, updateCategory);
+router.delete("/categories/:id", authenticateToken, requireAdmin, deleteCategory);
+
+// Public routes - no authentication required
 router.get("/categories", getAllCategories);
 router.get("/categories/:id", getCategoryById);
-router.put("/categories/:id", updateCategory);
-router.delete("/categories/:id", deleteCategory);
 
-// GET /api/lessons/filter - Filter lessons by category and tags (public)
+// Filter routes - public access for browsing content
 router.get('/lessons/filter', getFilteredLessonsController);
-
-// GET /api/posts/filter - Filter posts by category and tags (public)  
 router.get('/posts/filter', getFilteredPostsController);
-
-// GET /api/categories/tags - Get all unique tags (public)
 router.get('/tags', getAllTagsController);
 
 export default router;
