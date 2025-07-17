@@ -47,12 +47,15 @@ model Category {
   posts       Post[]
 }
 
-// Mock Lesson model (for future courses)
+// Lesson model - structured learning content
 model Lesson {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  content     String
   categoryId  String @db.ObjectId
+  title       String
+  content     String // Lesson explanation (text, HTML, or JSON)
+  order       Int @default(0) // Sorting index within category
+  duration    Int? // Estimated time in minutes
+  level       String @default("beginner") // "beginner", "intermediate", "advanced"
   tags        String[] // Up to 3 tags (validated in business logic)
   isPublished Boolean @default(false)
   createdAt   DateTime @default(now())

@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import categoryRoutes from './routes/category.routes';
+import lessonRoutes from './routes/lesson.routes';
 
 import cors from 'cors';
 import helmet from 'helmet';
@@ -47,6 +48,7 @@ app.get('/health', (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api", categoryRoutes);
+app.use("/api", lessonRoutes);
 
 // Error handling - must be last
 app.use(notFoundHandler);
