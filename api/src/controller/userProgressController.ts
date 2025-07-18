@@ -25,9 +25,17 @@ export const getProgressOfUserForLesson = asyncHandler(async (req, res) => {
 	return new ApiResponse(200, userProgresses).send(res);
 });
 
-export const getProgressOfUserForExcercise = asyncHandler(
-	async (req, res) => {}
-);
+export const getProgressOfUserForExcercise = asyncHandler(async (req, res) => {
+	const exerciseId = req.params.exerciseId;
+
+	const userIdForProgress = req.params.userId;
+
+	const userProgresses = await prisma.userProgress.findMany({
+		where: { userId: userIdForProgress, exerciseId },
+	});
+
+	return new ApiResponse(200, userProgresses).send(res);
+});
 
 export const updateProgressOfUserForLesson = asyncHandler(
 	async (req, res) => {}
