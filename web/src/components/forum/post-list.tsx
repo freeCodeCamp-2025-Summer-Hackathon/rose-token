@@ -22,7 +22,7 @@ const PostList = ({ posts = [] }: PostListProps) => {
     return posts.length > 0 ? (
         <div>
             {posts.map((post: Post) => 
-            <Link to={`/forum/posts/${post.slug}`}>
+            <Link to={`/forum/${post.slug}`}>
                 {renderPost(post)}
             </Link> 
             )}

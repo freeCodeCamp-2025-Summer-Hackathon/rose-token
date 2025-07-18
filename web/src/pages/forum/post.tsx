@@ -9,12 +9,13 @@ import { Input} from "@/components/forum/input";
 export default function Discussion() {
   const [myposts, setPosts] = useState<Post[]>([])
   const slug = useParams()
+
+  const fetchPosts = async() => {
+    const response = await axios.get(`http://localhost:3000/posts/${slug.slug}`)
+    setPosts(response.data.posts)
+    console.log(response.data.posts)
+  }
   useEffect(()=>{
-    const fetchPosts = async() => {
-      const response = await axios.get(`http://localhost:3000/posts/${slug.slug}`)
-      setPosts(response.data.posts)
-      console.log(response.data.posts)
-    }
     fetchPosts()
   }, [slug])
 

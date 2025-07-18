@@ -14,7 +14,7 @@ function Comment( { comment }: { comment: Comment }) {
 }
 
 export default function CommentsSection({ comments }: {comments: Comment[]}) {
-  if (comments.length === 0) return null;
+  if (comments.length === 0) return <></>;
 
   return (
     <div className="text-sm font-light rounded-md p-4 bg-zinc-900">

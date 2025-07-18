@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
 		element: <Forum/>,
 	},
 	{
-		path: "/forum/posts/:slug",
+		path: "/forum/:slug",
 		element: <Discussion />,
 	}
 	
