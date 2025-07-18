@@ -3,6 +3,7 @@ import {
 	getAllProgressOfUser,
 	getProgressOfUserForExcercise,
 	getProgressOfUserForLesson,
+	updateProgressOfUserForExcercise,
 	updateProgressOfUserForLesson,
 } from "../controller/userProgressController";
 
@@ -18,5 +19,8 @@ router.patch(
 	"/:userId/progress/lessons/:lessonId",
 	updateProgressOfUserForLesson
 );
-
+router.patch(
+	"/:userId/progress/exercises/:exerciseId",
+	updateProgressOfUserForExcercise
+);
 export default router;

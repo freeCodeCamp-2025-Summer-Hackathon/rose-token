@@ -65,5 +65,30 @@ export const updateProgressOfUserForLesson = asyncHandler(async (req, res) => {
 });
 
 export const updateProgressOfUserForExcercise = asyncHandler(
-	async (req, res) => {}
+	async (req, res) => {
+		const exerciseId = req.params.exerciseId;
+
+		const userIdForProgress = req.params.userId;
+		const progressStatus = req.body.progressStatus;
+
+		if (!progressStatus) {
+			throw new ApiError(400, "Progress status is required");
+		}
+
+		const userProgresses = await prisma.userProgress.findFirst({
+			where: { userId: userIdForProgress, exerciseId },
+		});
+
+		if (!userProgresses) {
+			throw new ApiError(404, "Progress not found");
+		}
+		const updatedProgress = await prisma.userProgress.update({
+			where: { id: userProgresses.id },
+			data: {
+				progressStatus,
+			},
+		});
+
+		return new ApiResponse(200, updatedProgress).send(res);
+	}
 );
