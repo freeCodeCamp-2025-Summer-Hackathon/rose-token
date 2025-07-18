@@ -22,3 +22,81 @@ model User {
   password String
 
 }
+
+enum Category {
+  GRAMMAR
+  VOCABULARY
+  SPEAKING
+  LISTENING
+  WRITING
+}
+
+enum Level {
+  Beginner
+  Intermediate
+  Advanced
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id            Int            @id @default(autoincrement())
+  title         String
+  course        Course         @relation(fields: [courseId], references: [id])
+  courseId      Int
+  category      Category
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  items         LessonContent[]
+  level         Level
+  duration      Int
+}
+
+model LessonContent {
+  id             Int          @id @default(autoincrement())
+  lessonId       Int
+  lesson         Lesson       @relation(fields: [lessonId], references: [id])
+  contributionId Int
+  contribution   Contribution @relation(fields: [contributionId], references: [id])
+  order          Int          
+}
+
+model Contribution {
+  id           Int       @id @default(autoincrement())
+  title        String
+  category     Category
+  tags         String[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  flashcardId  String?    
+  flashcard    Flashcard? @relation(fields: [flashcardId], references: [id])
+  noteId       String?   
+  note         Note?      @relation(fields: [noteId], references: [id])
+}
+
+model Flashcard {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  front         String   
+  back          String  
+  contributorId String   @db.ObjectId
+  contributor   User     @relation(fields: [contributorId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Note {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String   
+  body          String   
+  contributorId String   @db.ObjectId
+  contributor   User     @relation(fields: [contributorId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+
