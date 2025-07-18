@@ -5,66 +5,41 @@ import { demoComments } from "../../seeds/comments";
 
 const prisma = new PrismaClient();
 
-async function clearData() {
-  console.log('Clearing existing data...');
-  await prisma.comment.deleteMany({});
-  await prisma.post.deleteMany({});
-  await prisma.user.deleteMany({});
-  console.log('Data cleared successfully!');
-}
-
-async function seedUsers() {
+async function main(){
   console.log('Seeding users...');
-  for (const user of demoUsers) {
-    await prisma.user.create({
-      data: user
-    });
+  for (const user of demoUsers){
+    await prisma.user.upsert({
+      where: { id: user.id },
+      update: {},
+      create: user,
+    })
   }
   console.log('Users seeded successfully!');
-}
-
-async function seedPosts() {
-  console.log('Seeding posts...');
-  for (const post of demoPosts) {
-    await prisma.post.create({
-      data: post
-    });
+  for (const post of demoPosts){
+    await prisma.post.upsert({
+      where: { id: post.id },
+      update: {},
+      create: post,
+    })
   }
   console.log('Posts seeded successfully!');
-}
-
-async function seedComments() {
-  console.log('Seeding comments...');
-  for (const comment of demoComments) {
-    await prisma.comment.create({
-      data: comment
-    });
+  for (const comment of demoComments){
+    await prisma.comment.upsert({
+      where: { id: comment.id },
+      update: {},
+      create: comment,
+    })
   }
   console.log('Comments seeded successfully!');
 }
-
-async function handleError(error: any) {
-  console.error('Error seeding database:', error);
-  await prisma.$disconnect();
-  process.exit(1);
-}
-
-async function run() {
-  try {
-    console.log('Starting database seeding...');
-    await clearData();
-    await seedUsers();
-    await seedPosts();
-    await seedComments();
-    
-    console.log('Database seeding completed successfully!');
-  } catch (error) {
-    await handleError(error);
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-run();
+main()
+  .then(async () => {
+    await prisma.$disconnect()
+  })
+  .catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })
 
 export default prisma;
