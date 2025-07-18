@@ -26,7 +26,7 @@ export const getProgressOfUserForLesson = asyncHandler(async (req, res) => {
 });
 
 export const getProgressOfUserForExcercise = asyncHandler(async (req, res) => {
-	const exerciseId = req.params.exerciseId;
+	const exerciseId = req.params.lessonId;
 
 	const userIdForProgress = req.params.userId;
 
@@ -38,7 +38,7 @@ export const getProgressOfUserForExcercise = asyncHandler(async (req, res) => {
 });
 
 export const updateProgressOfUserForLesson = asyncHandler(async (req, res) => {
-	const exerciseId = req.params.exerciseId;
+	const lessonId = req.params.lessonId;
 
 	const userIdForProgress = req.params.userId;
 	const progressStatus = req.body.progressStatus;
@@ -48,7 +48,7 @@ export const updateProgressOfUserForLesson = asyncHandler(async (req, res) => {
 	}
 
 	const userProgresses = await prisma.userProgress.findFirst({
-		where: { userId: userIdForProgress, exerciseId },
+		where: { userId: userIdForProgress, lessonId },
 	});
 
 	if (!userProgresses) {
