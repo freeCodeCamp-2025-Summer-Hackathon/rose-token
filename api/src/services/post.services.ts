@@ -88,7 +88,7 @@ export async function createPostbySlug(slug: string, data: PostFormat){
             name: true,
             email: true,
           }
-        }
+        },
       }
     })
     return post;
@@ -129,7 +129,18 @@ export async function getRelatedPosts(slug: string){
             email: true,
           }
         },
-        comments: true,
+        comments: {
+          include:{
+            author: {
+              select:{
+                username: true,
+                id: true,
+                name: true,
+                email: true,
+              }
+            }
+          }
+        },
       }
     })
     return posts;

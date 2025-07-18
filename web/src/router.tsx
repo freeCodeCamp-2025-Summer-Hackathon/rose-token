@@ -2,9 +2,8 @@ import { createBrowserRouter } from "react-router";
 import { Application } from "./app.tsx";
 import { ErrorPage } from "./pages/error.tsx";
 import { HomePage } from "./pages/index.tsx";
-import { ProtectedRoute } from "./protected-route/protected-route.tsx";
-import { DashboardPage } from "./pages/dashboard.tsx";
-
+import Discussion  from "./pages/forum/post.tsx";
+import {Forum} from "./pages/discussion.tsx";
 export const router = createBrowserRouter([
 	{
 		path: "/",
@@ -14,16 +13,16 @@ export const router = createBrowserRouter([
 			{
 				index: true,
 				element: <HomePage />,
-			},
-			{
-				element: <ProtectedRoute />, // wrapper for all protected routes
-				children: [
-				{
-					path: "dashboard",
-					element: <DashboardPage />,
-				},
-				],
-			},
+			}
 		],
 	},
+	{
+		path: "/forum",
+		element: <Forum/>,
+	},
+	{
+		path: "/forum/:slug",
+		element: <Discussion />,
+	}
+	
 ]);
