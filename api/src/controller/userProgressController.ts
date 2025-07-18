@@ -18,11 +18,11 @@ export const getProgressOfUserForLesson = asyncHandler(async (req, res) => {
 
 	const userIdForProgress = req.params.userId;
 
-	const userProgresses = await prisma.userProgress.findMany({
+	const userProgress = await prisma.userProgress.findFirst({
 		where: { userId: userIdForProgress, lessonId },
 	});
 
-	return new ApiResponse(200, userProgresses).send(res);
+	return new ApiResponse(200, userProgress).send(res);
 });
 
 export const getProgressOfUserForExcercise = asyncHandler(async (req, res) => {
@@ -30,11 +30,11 @@ export const getProgressOfUserForExcercise = asyncHandler(async (req, res) => {
 
 	const userIdForProgress = req.params.userId;
 
-	const userProgresses = await prisma.userProgress.findMany({
+	const userProgress = await prisma.userProgress.findFirst({
 		where: { userId: userIdForProgress, exerciseId },
 	});
 
-	return new ApiResponse(200, userProgresses).send(res);
+	return new ApiResponse(200, userProgress).send(res);
 });
 
 export const updateProgressOfUserForLesson = asyncHandler(async (req, res) => {
@@ -47,15 +47,15 @@ export const updateProgressOfUserForLesson = asyncHandler(async (req, res) => {
 		throw new ApiError(400, "Progress status is required");
 	}
 
-	const userProgresses = await prisma.userProgress.findFirst({
+	const userProgress = await prisma.userProgress.findFirst({
 		where: { userId: userIdForProgress, lessonId },
 	});
 
-	if (!userProgresses) {
+	if (!userProgress) {
 		throw new ApiError(404, "Progress not found");
 	}
 	const updatedProgress = await prisma.userProgress.update({
-		where: { id: userProgresses.id },
+		where: { id: userProgress.id },
 		data: {
 			progressStatus,
 		},
@@ -75,15 +75,15 @@ export const updateProgressOfUserForExcercise = asyncHandler(
 			throw new ApiError(400, "Progress status is required");
 		}
 
-		const userProgresses = await prisma.userProgress.findFirst({
+		const userProgress = await prisma.userProgress.findFirst({
 			where: { userId: userIdForProgress, exerciseId },
 		});
 
-		if (!userProgresses) {
+		if (!userProgress) {
 			throw new ApiError(404, "Progress not found");
 		}
 		const updatedProgress = await prisma.userProgress.update({
-			where: { id: userProgresses.id },
+			where: { id: userProgress.id },
 			data: {
 				progressStatus,
 			},
