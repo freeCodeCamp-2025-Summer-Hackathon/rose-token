@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { me } from "../controller/user.controller";
 import { comment, allComment, deleteCommentById, patchComment } from "../controller/comment.controller";
-import { deletePostsbyId, getDiscussionPosts, getMainPosts, post, postUpdate, postbySlug} from "../controller/post.controller";
+import { deletePostsbyId, getDiscussionPosts, getMainPosts, post, postUpdate, postbySlug, getPostCategory} from "../controller/post.controller";
 
 
 const router = Router();
@@ -18,6 +18,9 @@ router.get("/posts/:id/comments", allComment)
 router.post("/posts/:id/comments", comment)
 router.patch("/posts/:id/comments/:id", patchComment)
 router.delete("/posts/:id/comments/:id/delete", deleteCommentById)
+
+router.get("/categories", getPostCategory)
+
 
 
 export default router;

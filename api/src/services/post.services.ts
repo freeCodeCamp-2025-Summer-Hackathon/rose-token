@@ -1,3 +1,4 @@
+import { connect } from "http2";
 import prisma from "./prisma";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -5,11 +6,12 @@ interface PostFormat{
   title:string,
   body:string,
   authorId:string,
+  categoryId: string[]
 }
 
 export async function createPost(data: PostFormat) {
   try {
-    const { title, body, authorId } = data;
+    const { title, body, authorId, categoryId } = data;
     
     const userExists = await prisma.user.findUnique({
       where: {
@@ -27,6 +29,11 @@ export async function createPost(data: PostFormat) {
         slug: `${title.split(" ").join("-").toLowerCase()}-${uuidv4()}`,
         createdAt: new Date(),
         isMainPost: true,
+        categories: {
+          create: categoryId.map(id => ({
+            category: { connect: {id} }
+          }))
+        }
       },
       include:{
         author: {
@@ -163,6 +170,22 @@ export const deletePosts = async (postId: string)=>{
   }
   catch(error){
     console.error('Error in deleting posts: ', error);
+    throw error;
+  }
+}
+
+export const getPostByCategory = async (categoryId: string) => {
+  try{
+    const category = await prisma.postCategory.findFirst({
+      where: { id: categoryId,}, 
+      include: {
+        post: true,
+        category: true
+      }
+    })
+    return category 
+  } catch(error){
+    console.log("Error in fetching post by category: ", error)
     throw error;
   }
 }
