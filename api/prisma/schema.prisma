@@ -36,25 +36,7 @@ model Post {
   comments  Comment[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  categories PostCategory[]  
   // isDeleted Boolean @default(false)
-}
-
-model Category {
-  id          String          @id @default(auto()) @map("_id") @db.ObjectId
-  name        String          @unique
-  posts       PostCategory[]  
-}
-
-model PostCategory {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  postId     String
-  categoryId String
-
-  post       Post     @relation(fields: [postId], references: [id])
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  @@unique([postId, categoryId]) 
 }
 
 enum Status {
