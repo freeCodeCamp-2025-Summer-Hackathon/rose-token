@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createPost, updatePost, createPostbySlug, getAllMainPosts, getRelatedPosts, deletePosts } from "../services/post.services";
+import { createPost, updatePost, createPostbySlug, getAllMainPosts, getRelatedPosts, deletePosts} from "../services/post.services";
 import prisma from "../services/prisma";
 
 export const post = async (req: Request, res: Response) => {
