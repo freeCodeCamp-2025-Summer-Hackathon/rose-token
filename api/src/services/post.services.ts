@@ -1,3 +1,4 @@
+import { connect } from "http2";
 import prisma from "./prisma";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -177,4 +178,3 @@ export const deletePosts = async (postId: string)=>{
     throw error;
   }
 }
-

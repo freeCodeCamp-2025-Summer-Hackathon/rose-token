@@ -14,6 +14,7 @@
   "packageManager": "pnpm@10.12.3",
   "dependencies": {
     "@prisma/client": "^6.11.1",
+    "@prisma/extension-accelerate": "^2.0.2",
     "argon2": "^0.43.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -22,7 +23,7 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "prisma": "^6.11.1",
+    "prisma": "^6.12.0",
     "uuid": "^11.1.0",
     "zod": "^3.25.76"
   },
