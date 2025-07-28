@@ -14,20 +14,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  email         String @unique
-  username      String @unique
-  password      String
-  role          String @default("user")  //user or admin
-  courses       String[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String @unique
+  username  String @unique
+  password  String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+}
+
+// Categories - Admin defined only
+model Category {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String @unique
+  description String?
+  color       String? // For UI styling (hex color)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
 }
 
-<<<<<<< HEAD
+// Lesson model - structured learning content
+model Lesson {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId  String @db.ObjectId
+  title       String
+  content     String // Lesson explanation (text, HTML, or JSON)
+  order       Int @default(0) // Sorting index within category
+  duration    Int? // Estimated time in minutes
+  level       String @default("beginner") // "beginner", "intermediate", "advanced"
+  tags        String[] // Up to 3 tags (validated in business logic)
+  isPublished Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Mock Post model (for future forum)
+model Post {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  categoryId  String @db.ObjectId
+  tags        String[] // Up to 3 tags (validated in business logic)
+  authorId    String @db.ObjectId
+  isPublished Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      String @db.ObjectId
+}
+
 
 model ContentFile {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -40,46 +83,30 @@ model ContentFile {
   uploaderId String   @db.ObjectId
   updatedAt DateTime? @default(now())
   updatedBy String?  @db.ObjectId
-  categoryIds String[] @db.ObjectId
-  tagIds String[] @db.ObjectId
 
 }
 model Course {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
-  lessons     Lesson[]
+
 }
 
-model Lesson {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  content       String?
-  course        Course         @relation(fields: [courseId], references: [id])
-  courseId      String
-  contributions Contribution[]
-}
+
 
 model Contribution {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String
-  category   Category
+  categoryId String    @db.ObjectId
   tags       String[]
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  lesson     Lesson    @relation(fields: [lessonId], references: [id])
-  lessonId   String
+ 
+  lessonId   String @db.ObjectId
 }
 
-enum Category {
-  GRAMMAR
-  VOCABULARY
-  SPEAKING
-  LISTENING
-  WRITING
-}
-=======
+
 model Language {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   code            String  
@@ -90,4 +117,3 @@ model Language {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
->>>>>>> feat/language-api
