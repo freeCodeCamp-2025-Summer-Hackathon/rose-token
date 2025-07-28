@@ -15,18 +15,18 @@ export const contributionService = {
     content: string;
     category: Category;
     tags?: string[];
-    lessonId: number;
+    lessonId: string;
   }) {
     return prisma.contribution.create({ data });
   },
 
-  async getContribution(id: number) {
+  async getContribution(id: string) {
     return prisma.contribution.findUnique({
       where: { id },
     });
   },
 
-  async updateContribution(id: number, data: {
+  async updateContribution(id: string, data: {
     title?: string;
     content?: string;
     category?: Category;
@@ -38,7 +38,7 @@ export const contributionService = {
     });
   },
 
-  async deleteContribution(id: number) {
+  async deleteContribution(id: string) {
     return prisma.contribution.delete({
       where: { id },
     });
