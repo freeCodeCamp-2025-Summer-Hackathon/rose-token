@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import * as lessonService from "../services/lesson.services";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
 
+// works
+
 // GET /categories/:categoryId/lessons - Get all lessons in a category (Public)
 export const getLessonsByCategory = async (req: Request, res: Response): Promise<void> => {
   try {
