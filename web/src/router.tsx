@@ -6,6 +6,8 @@ import { ProtectedRoute } from "./protected-route/protected-route.tsx";
 import { DashboardPage } from "./pages/dashboard.tsx";
 import ContentUploadPage from "./pages/content-upload.tsx";
 
+import Discussion  from "./pages/forum/post.tsx";
+import {Forum} from "./pages/discussion.tsx";
 export const router = createBrowserRouter([
 	{
 		path: "/",
@@ -15,6 +17,18 @@ export const router = createBrowserRouter([
 			{
 				index: true,
 				element: <HomePage />,
+			}
+		],
+	},
+	{
+		path: "/forum",
+		element: <Forum/>,
+	},
+	{
+		path: "/forum/:slug",
+		element: <Discussion />,
+	}
+	
 			},
 			{
 				path: "content-upload",

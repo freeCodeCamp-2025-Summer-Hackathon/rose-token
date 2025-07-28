@@ -132,3 +132,20 @@ model Language {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+
+
+enum Status {
+  DELETED
+  APPROVED
+  ARCHIVED
+}
+
+model Comment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  comment String
+  status    Status @default(APPROVED)
+  authorId  String    @db.ObjectId
+  date     DateTime
+  postId  String @db.ObjectId
+}
