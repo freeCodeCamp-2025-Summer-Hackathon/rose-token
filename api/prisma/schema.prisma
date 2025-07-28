@@ -23,32 +23,24 @@ model User {
 
 }
 
-enum Category {
-  GRAMMAR
-  VOCABULARY
-  SPEAKING
-  LISTENING
-  WRITING
-}
-
 model Course {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
   lessons     Lesson[]
 }
 
 model Lesson {
-  id            Int            @id @default(autoincrement())
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   content       String?
   course        Course         @relation(fields: [courseId], references: [id])
-  courseId      Int
+  courseId      String
   contributions Contribution[]
 }
 
 model Contribution {
-  id         Int       @id @default(autoincrement())
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String
   category   Category
@@ -56,5 +48,13 @@ model Contribution {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   lesson     Lesson    @relation(fields: [lessonId], references: [id])
-  lessonId   Int
+  lessonId   String
+}
+
+enum Category {
+  GRAMMAR
+  VOCABULARY
+  SPEAKING
+  LISTENING
+  WRITING
 }
