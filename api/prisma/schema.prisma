@@ -15,14 +15,19 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  email String @unique
-  username String @unique
-  password String
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String @unique
+  username      String @unique
+  password      String
+  role          String @default("user")  //user or admin
+  courses       String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
 }
 
+<<<<<<< HEAD
 
 model ContentFile {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -74,3 +79,15 @@ enum Category {
   LISTENING
   WRITING
 }
+=======
+model Language {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  code            String  
+  name            String  
+  description     String  
+  joinedCount     Int   
+  completedCount  Int  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+>>>>>>> feat/language-api
