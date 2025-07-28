@@ -12,7 +12,7 @@ const getAllLanguages:RequestHandler = asyncHandler(async (req,res) => {
 
 const createLanguage:RequestHandler = asyncHandler(async (req,res) => {
     const languageDetails = await languageService.createLanguage(req.body);
-    return new ApiResponse( 200 , languageDetails , "New Language Created successfully !!" ).send(res);
+    return new ApiResponse( 201 , languageDetails , "New Language Created successfully !!" ).send(res);
 })
 
 //Toggle Language course - join and leave course

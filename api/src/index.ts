@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
-import languageRoutes from './routes/language.routes'
+import languageRoutes from './routes/language.routes';
 
 import cors from 'cors';
 import helmet from 'helmet';
@@ -27,10 +27,13 @@ app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 app.use(helmet());              
 app.use(morgan('dev')); 
-
 app.use("/",authRoutes);
 app.use("/", userRoutes);
 app.use("/languages", languageRoutes);
+
+
+
+
 
 
 server.listen(PORT,()=>{

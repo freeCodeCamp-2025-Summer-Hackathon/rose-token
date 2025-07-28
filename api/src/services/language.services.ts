@@ -17,10 +17,7 @@ export const getAllLanguages = async ( ) => {
         orderBy: { name: "desc" },
     })
     
-    if(!fetchedLanguages) {
-        throw new ApiError(500,"Failed to fetch languages")
-    }
-
+ 
     return fetchedLanguages
 
 }
