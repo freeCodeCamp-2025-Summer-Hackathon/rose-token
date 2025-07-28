@@ -31,15 +31,30 @@ model User {
  
 }
 
-// Categories - Admin defined only
-model Category {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String @unique
-  description String?
-  color       String? // For UI styling (hex color)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
+enum ProgressType {
+  lesson
+  exercise
+}
+
+enum ProgressStatus {
+  in_progress
+  completed
+}
+
+model UserProgress {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+
+  progressOf     ProgressType // lesson or exercise
+  progressStatus ProgressStatus // in progress, completed
+  // in future may add progressPercent
+  lessonId       String?        @db.ObjectId
+  exerciseId     String?        @db.ObjectId
+  createdAt      DateTime       @default(now())
+  createdBy      String         @db.ObjectId
+  updatedAt      DateTime       @default(now())
+  updatedBy      String         @db.ObjectId
 }
 
 // Lesson model - structured learning content
