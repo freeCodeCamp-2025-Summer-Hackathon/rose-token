@@ -1,7 +1,10 @@
+
+//dashboard = index
+
 export const HomePage = () => (
 	<section className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6">
 		<h1 className="text-5xl font-extrabold mb-4">
-			👋 Welcome to <span className="text-blue-600">FCC Hack</span>! 🚀
+			👋 Welcome to <span className="text-blue-600">LangLearn App</span>! 🚀
 		</h1>
 		<p className="text-xl mb-2">
 			Unleash your creativity. Build. Collaborate. Win.
