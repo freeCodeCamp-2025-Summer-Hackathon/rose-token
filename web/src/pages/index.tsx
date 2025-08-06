@@ -99,9 +99,12 @@ export const HomePage: React.FC = () => {
                 <div key={course.id} className="border rounded p-4 shadow-sm bg-white">
                   <h3 className="text-lg font-bold mb-1">{course.title}</h3>
                   <p className="text-sm text-gray-600 mb-2">{course.description}</p>
-                  <button className="text-sm text-blue-600 hover:underline">
-                    Subscribe
-                  </button>
+                  <a
+  href="/learn"
+  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+>
+  Subscribe
+</a>
                 </div>
               ))}
             </div>

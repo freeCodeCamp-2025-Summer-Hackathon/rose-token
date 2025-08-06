@@ -87,6 +87,7 @@ model Contribution {
   front         String?
   back          String?
   body          String?
+  language      Language
   category      Category
   level         Level
   tags          String[]

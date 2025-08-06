@@ -35,6 +35,7 @@ export const createContribution = async (data: CreateContributionDTO) => {
       contributor: {
         connect: { id: userId },
       },
+      language: language.toUpperCase() as Language,
       front: type.toUpperCase() === "FLASHCARD" ? frontText : undefined,
       back: type.toUpperCase() === "FLASHCARD" ? backText : undefined,
       body: type.toUpperCase() === "NOTE" ? noteText : undefined,
