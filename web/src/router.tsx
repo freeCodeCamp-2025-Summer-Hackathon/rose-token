@@ -2,6 +2,9 @@ import { createBrowserRouter } from "react-router";
 import { Application } from "./app.tsx";
 import { ErrorPage } from "./pages/error.tsx";
 import { HomePage } from "./pages/index.tsx";
+import { AddContributionPage } from "./pages/add-contribution.tsx";
+import { ContributionsPage } from './pages/contributions.tsx'
+import { LearnPage } from './pages/learn.tsx';
 
 /*
 
@@ -22,6 +25,18 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "addcontrib",
+        element: <AddContributionPage />,
+      },
+      {
+        path: "contributions",
+        element: <ContributionsPage />,
+      },
+      {
+        path: "learn",
+        element: <LearnPage />,
       },
       /*
       {

@@ -14,138 +14,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  USER
-  ADMIN
+enum Category {
+  GRAMMAR
+  VOCABULARY
+  SPEAKING
+  LISTENING
+  WRITING
+}
+
+enum Level {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum ContributionType {
+  FLASHCARD
+  NOTE
+}
+
+enum Language {
+  SPANISH
+  GERMAN
+  JAPANESE
+  ARABIC
+  MANDARIN
 }
 
 model User {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String @unique
-  username  String @unique
-  password  String
-  role      UserRole @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
- 
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String         @unique
+  username      String         @unique
+  password      String
+  contributions Contribution[]
 }
 
-
-enum ProgressType {
-  lesson
-  exercise
-}
-
-enum ProgressStatus {
-  in_progress
-  completed
-}
-
-model UserProgress {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-
-  progressOf     ProgressType // lesson or exercise
-  progressStatus ProgressStatus // in progress, completed
-  // in future may add progressPercent
-  lessonId       String?        @db.ObjectId
-  exerciseId     String?        @db.ObjectId
-  createdAt      DateTime       @default(now())
-  createdBy      String         @db.ObjectId
-  updatedAt      DateTime       @default(now())
-  updatedBy      String         @db.ObjectId
-}
-
-// Lesson model - structured learning content
-model Lesson {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  categoryId  String @db.ObjectId
-  title       String
-  content     String // Lesson explanation (text, HTML, or JSON)
-  order       Int @default(0) // Sorting index within category
-  duration    Int? // Estimated time in minutes
-  level       String @default("beginner") // "beginner", "intermediate", "advanced"
-  tags        String[] // Up to 3 tags (validated in business logic)
-  isPublished Boolean @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-// Mock Post model (for future forum)
-model Post {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  content     String
-  categoryId  String @db.ObjectId
-  tags        String[] // Up to 3 tags (validated in business logic)
-  authorId    String @db.ObjectId
-  isPublished Boolean @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  author      String @db.ObjectId
-}
-
-
-model ContentFile {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  filename   String
-  originalName String
-  path       String
-  mimetype   String
-  size       Int
-  uploadedAt DateTime @default(now())
-  uploaderId String   @db.ObjectId
-  updatedAt DateTime? @default(now())
-  updatedBy String?  @db.ObjectId
-
-}
 model Course {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
+  language    Language
   description String?
-
+  lessons     Lesson[]
 }
 
+model Lesson {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  course    Course          @relation(fields: [courseId], references: [id])
+  courseId  String          @db.ObjectId
+  category  Category
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  items     LessonContent[]
+  level     Level
+  duration  Int
+}
 
+model LessonContent {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  lessonId       String       @db.ObjectId
+  lesson         Lesson       @relation(fields: [lessonId], references: [id])
+  contributionId String       @db.ObjectId
+  contribution   Contribution @relation(fields: [contributionId], references: [id])
+  order          Int
+}
 
 model Contribution {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  title      String
-  content    String
-  categoryId String    @db.ObjectId
-  tags       String[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
- 
-  lessonId   String @db.ObjectId
-}
-
-
-model Language {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
-  code            String  
-  name            String  
-  description     String  
-  joinedCount     Int   
-  completedCount  Int  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
-
-
-
-enum Status {
-  DELETED
-  APPROVED
-  ARCHIVED
-}
-
-model Comment {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  comment String
-  status    Status @default(APPROVED)
-  authorId  String    @db.ObjectId
-  date     DateTime
-  postId  String @db.ObjectId
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  type          ContributionType
+  front         String?
+  back          String?
+  body          String?
+  category      Category
+  level         Level
+  tags          String[]
+  contributor   User           @relation(fields: [contributorId], references: [id])
+  contributorId String         @db.ObjectId
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  LessonContent LessonContent[]
+  votes         Int            @default(0)
 }

@@ -1,6 +1,10 @@
 import http from "http";
 import express from "express";
+import contributionRoutes from "./routes/contribution.routes";
+
+/*
 import cookieParser from "cookie-parser";
+
 
 import filesRoutes from "./routes/files.routes";
 import languageRoutes from './routes/language.routes';
@@ -14,7 +18,6 @@ import morgan from "morgan";
 
 
 
- 
 
 require("dotenv").config();
 
@@ -39,18 +42,30 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(helmet());
 app.use(morgan("dev"));
 
+
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/files", filesRoutes);
 
 app.use("/languages", languageRoutes);
 
+app.use("/api", contributionRoutes);
+*/
 
+//app.use("/users", userProgressRoutes);
 
-
-
-app.use("/users", userProgressRoutes);
-
+/*
 server.listen(PORT, () => {
 	console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+
+*/
+
+const app = express();
+app.use(express.json());
+
+app.use("/api", contributionRoutes);
+
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
 });
