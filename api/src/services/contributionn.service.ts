@@ -28,7 +28,7 @@ export const createContribution = async (data: CreateContributionDTO) => {
 
   const contribution = await prisma.contribution.create({
     data: {
-      title: `Untitled ${type.toLowerCase()}`, // You can customize this
+      title: `${frontText} ${type.toLowerCase()}`,
       type: type.toUpperCase() as ContributionType,
       category: category.toUpperCase() as Category,
       level: difficulty.toUpperCase() as Level,
@@ -45,4 +45,17 @@ export const createContribution = async (data: CreateContributionDTO) => {
   console.log("success");
 
   return contribution;
+};
+
+export const getAllContributions = async () => {
+  return await prisma.contribution.findMany({
+  select: {
+    id: true,
+    title: true,
+    // Include other fields as needed
+  },
+  orderBy: {
+    createdAt: 'desc', // 'desc' = newest first, 'asc' = oldest first
+  },
+});
 };

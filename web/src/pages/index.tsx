@@ -6,7 +6,8 @@
 
 //import React from "react";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 
 // Types
@@ -24,20 +25,31 @@ interface Contribution {
   votes: number;
 }
 
-// Dummy Data
-const dummyCourses: Course[] = [
-  { id: "1", title: "Spanish Basics", description: "Learn core Spanish vocabulary." },
-  { id: "2", title: "French Grammar", description: "Understand French sentence structure." },
-];
-
-const dummyContributions: Contribution[] = [
-  { id: "a", title: "French Verb Flashcard", votes: 2 },
-  { id: "b", title: "Spanish Note on Gender", votes: -1 },
-];
-
 export const HomePage: React.FC = () => {
   const [mode, setMode] = useState<Mode>("learner");
-  const [contributions, setContributions] = useState<Contribution[]>(dummyContributions);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [contributions, setContributions] = useState<Contribution[]>([]);
+
+  useEffect(() => {
+  // Fetch courses
+  axios.get("http://localhost:3000/fetchCourses/courses")
+    .then((res: { data: any[]; }) => setCourses(res.data))
+    .catch(() => console.error("Failed to fetch courses"));
+
+  // Fetch contributions
+  axios.get("http://localhost:3000/api/contributions")
+    .then((res: { data: any[]; }) => {
+      // If you don’t have real votes yet, default to 0
+      const contributionsWithVotes = res.data.map((c: any) => ({
+        ...c,
+        votes: 0,
+      }));
+      setContributions(contributionsWithVotes);
+    })
+    .catch(() => console.error("Failed to fetch contributions"));
+}, []);
+
+
  // const navigate = useNavigate();
 
   const handleVote = (id: string, delta: number) => {
@@ -83,7 +95,7 @@ export const HomePage: React.FC = () => {
           <section>
             <h2 className="text-xl font-semibold mb-4">Available Courses</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              {dummyCourses.map((course) => (
+              {courses.map((course) => (
                 <div key={course.id} className="border rounded p-4 shadow-sm bg-white">
                   <h3 className="text-lg font-bold mb-1">{course.title}</h3>
                   <p className="text-sm text-gray-600 mb-2">{course.description}</p>

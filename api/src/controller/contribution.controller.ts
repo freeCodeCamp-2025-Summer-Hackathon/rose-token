@@ -1,8 +1,12 @@
 // src/controllers/contribution.controller.ts
 import { Request, Response } from "express";
 import { createContribution } from "../services/contributionn.service";
+import { getAllContributions } from "../services/contributionn.service";
+import { ApiResponse } from "../utils/ApiResponse";
+import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/ApiError";
 
-export const handleCreateContribution = async (req: Request, res: Response) => {
+export const handleCreateContribution = asyncHandler(async (req, res) => {
   try {
     const { type, content, category, difficulty, language, frontText, backText, noteText } = req.body;
 
@@ -20,9 +24,19 @@ export const handleCreateContribution = async (req: Request, res: Response) => {
       noteText
     });
 
-    return res.status(201).json(contribution);
+    //return res.status(201).json(contribution);
+    return new ApiResponse( 201 , contribution , "Contrib Created" ).send(res);
   } catch (err) {
     console.error("Create Contribution Error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    throw new ApiError(500, 'Error creating');
+  }
+});
+
+export const getContributionsController = async (req: Request, res: Response) => {
+  try {
+    const contributions = await getAllContributions();
+    res.json(contributions);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch contributions" });
   }
 };

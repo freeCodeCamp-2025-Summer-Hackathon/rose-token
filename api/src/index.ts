@@ -1,6 +1,8 @@
 import http from "http";
 import express from "express";
 import contributionRoutes from "./routes/contribution.routes";
+import courseRoutes from "./routes/course.routes";
+//import cors from "cors";
 
 /*
 import cookieParser from "cookie-parser";
@@ -12,7 +14,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import userProgressRoutes from "./routes/userProgress.route";
 
-import cors from "cors";
+
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -65,6 +67,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api", contributionRoutes);
+app.use("/fetchCourses", courseRoutes)
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
