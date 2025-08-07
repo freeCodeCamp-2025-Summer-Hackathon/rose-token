@@ -17,7 +17,7 @@ async function main(){
   }
   console.log('Users seeded successfully!');
 
-  /*
+
   for (const post of demoPosts){
     await prisma.post.upsert({
       where: { id: post.id },
@@ -33,7 +33,7 @@ async function main(){
       create: comment,
     })
   }
-  console.log('Comments seeded successfully!');*/
+  console.log('Comments seeded successfully!');
 }
 
 main()

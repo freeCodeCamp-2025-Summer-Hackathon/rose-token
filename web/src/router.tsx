@@ -5,6 +5,7 @@ import { HomePage } from "./pages/index.tsx";
 import { AddContributionPage } from "./pages/add-contribution.tsx";
 import { ContributionsPage } from './pages/contributions.tsx'
 import { LearnPage } from './pages/learn.tsx';
+import {Forum} from "./pages/discussion.tsx";
 
 /*
 
@@ -13,7 +14,6 @@ import { DashboardPage } from "./pages/dashboard.tsx";
 import ContentUploadPage from "./pages/content-upload.tsx";
 
 import Discussion  from "./pages/forum/post.tsx";
-import {Forum} from "./pages/discussion.tsx";
 */
 
 export const router = createBrowserRouter([
@@ -38,11 +38,12 @@ export const router = createBrowserRouter([
         path: "learn",
         element: <LearnPage />,
       },
-      /*
+      
       {
         path: "forum",
         element: <Forum />,
       },
+      /*
       {
         path: "forum/:slug",
         element: <Discussion />,

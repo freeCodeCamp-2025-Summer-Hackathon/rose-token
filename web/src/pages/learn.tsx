@@ -9,7 +9,7 @@ export const LearnPage = () => {
   const [waitingForSelfAssessment, setWaitingForSelfAssessment] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const language = "Spanish"; 
+  const language = "Japanese"; 
 
   useEffect(() => {
     const fetchContent = async () => {
