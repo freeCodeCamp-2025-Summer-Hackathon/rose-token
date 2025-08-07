@@ -88,6 +88,9 @@ export const HomePage: React.FC = () => {
           >
             Contributor
           </button>
+          <a href="/forum" className="px-4 py-2 ml-10 rounded border bg-gray-100 text-gray-800 hover:bg-gray-200">
+          Forum
+          </a>
         </div>
 
         {/* Learner View */}
