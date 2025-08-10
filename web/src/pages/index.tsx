@@ -1,15 +1,10 @@
 
-//dashboard = index
-
 // src/pages/index.tsx
-// src/pages/index.tsx
-
-//import React from "react";
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router";
-//import { useNavigate } from "react-router-dom";
+
 
 // Types
 type Mode = "learner" | "contributor";
@@ -35,14 +30,13 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
   // Fetch courses
-  axios.get("http://localhost:3000/fetchCourses/courses")
+  axios.get("http://localhost:3000/api/fetchCourses/courses")
     .then((res: { data: any[]; }) => setCourses(res.data))
     .catch(() => console.error("Failed to fetch courses"));
 
   // Fetch contributions
   axios.get("http://localhost:3000/api/contributions")
     .then((res: { data: any[]; }) => {
-      // If you don’t have real votes yet, default to 0
       const contributionsWithVotes = res.data.map((c: any) => ({
         ...c,
         votes: 0,
@@ -55,13 +49,10 @@ export const HomePage: React.FC = () => {
     axios
     .get(`http://localhost:3000/api/user/${userId}/progress`)
     .then((res: { data: {progress: number} }) => {
-      console.log(res.data)
       setProgress(res.data.progress)})
     .catch(() => console.error("Failed to fetch progress"));
 }, []);
 
-
- // const navigate = useNavigate();
 
   const handleVote = (id: string, delta: number) => {
     setContributions((prev) =>
@@ -73,7 +64,7 @@ export const HomePage: React.FC = () => {
     <div className="min-h-screen bg-white text-gray-800">
       {/* App Header */}
       <header className="bg-white border-b shadow-sm py-4 px-6 mb-6">
-        <h1 className="text-2xl font-bold">🌍 LangLearn App</h1>
+        <h1 className="text-2xl font-bold">🌍 LangLantern</h1>
       </header>
 
       <main className="max-w-4xl mx-auto px-4">
@@ -113,9 +104,9 @@ export const HomePage: React.FC = () => {
                 <div key={course.id} className="border rounded p-4 shadow-sm bg-white">
                   <h3 className="text-lg font-bold mb-1">{course.title}</h3>
                   <p className="text-sm text-gray-600 mb-2">{course.description}</p>
-                  <a href="/learn" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                    Subscribe
-                  </a>
+                  <div className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    <Link to={`/learn/${course.title}`}>Learn</Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -160,13 +151,13 @@ export const HomePage: React.FC = () => {
                       onClick={() => handleVote(contribution.id, 1)}
                       className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
                     >
-                      👍
+                      ↑
                     </button>
                     <button
                       onClick={() => handleVote(contribution.id, -1)}
                       className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
                     >
-                      👎
+                      ↓
                     </button>
                   </div>
                 </li>

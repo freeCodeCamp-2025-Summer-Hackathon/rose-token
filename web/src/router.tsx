@@ -3,7 +3,6 @@ import { Application } from "./app.tsx";
 import { ErrorPage } from "./pages/error.tsx";
 import { HomePage } from "./pages/index.tsx";
 import { AddContributionPage } from "./pages/add-contribution.tsx";
-import { ContributionsPage } from './pages/contributions.tsx'
 import { LearnPage } from './pages/learn.tsx';
 import {Forum} from "./pages/discussion.tsx";
 import Discussion  from "./pages/forum/post.tsx";
@@ -32,11 +31,7 @@ export const router = createBrowserRouter([
         element: <AddContributionPage />,
       },
       {
-        path: "contributions",
-        element: <ContributionsPage />,
-      },
-      {
-        path: "learn",
+        path: "learn/:language",
         element: <LearnPage />,
       },
       

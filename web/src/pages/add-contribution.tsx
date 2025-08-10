@@ -1,8 +1,6 @@
 
-//add contributions
-
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export const AddContributionPage = () => {
   const [contributionType, setContributionType] = useState('flashcard');
@@ -12,14 +10,14 @@ export const AddContributionPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
+  const navigate = useNavigate();
 
-  const categories = ['Grammar', 'Pronunciation', 'Vocabulary', 'Culture', 'Phrases'];
+  const categories = ['Grammar', 'Vocabulary', 'Speaking', 'Listening', 'Writing'];
   const difficulties = ['Easy', 'Medium', 'Hard'];
   const languages = ['Spanish', 'German', 'Japanese', 'Arabic', 'Mandarin'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("hllo")
      try {
     const response = await fetch("http://localhost:3000/api/contributions", {
       method: "POST",
@@ -37,8 +35,6 @@ export const AddContributionPage = () => {
       ), 
     });
 
-    console.log("hellloo")
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || 'Failed to create contribution');
@@ -47,21 +43,9 @@ export const AddContributionPage = () => {
     const result = await response.json();
     console.log("Success:", result);
 
-
-    /*
-    // Reset form
-    setContributionType('flashcard');
-    setFrontText('');
-    setBackText('');
-    setNoteText('');
-    setSelectedCategory('');
-    // ... reset other states
-    */
-
+    navigate("/");
   } catch (error) {
     console.error("Error:", error);
-    // Set error state for UI: 
-    // setSubmissionError(error.message);
   }
   };
 

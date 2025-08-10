@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import axios from "axios";
 
 export const LearnPage = () => {
@@ -11,14 +11,12 @@ export const LearnPage = () => {
   const [loading, setLoading] = useState(true);
   const userId = "68929dd13f1acbe5114c1077";
 
-  const language = "Japanese"; 
+  const { language } = useParams();
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/fetchLearning/learn/${language}`);
-        console.log("Fetched data:", res.data);
-        await axios.post(`http://localhost:3000/api/user/${userId}/progress`);
+        const res = await axios.get(`http://localhost:3000/api/fetchLearning/learn/${language}`);
         setLearningContent(res.data);
       } catch (error) {
         console.error("Error fetching learning content", error);
@@ -38,8 +36,9 @@ export const LearnPage = () => {
     setWaitingForSelfAssessment(true);
   };
 
-  const handleSelfAssessment = (wasCorrect: boolean) => {
+  const handleSelfAssessment = async (wasCorrect: boolean) => {
     console.log(`User assessment: ${wasCorrect ? "Correct" : "Incorrect"} for item ${currentContent.id}`);
+    await axios.post(`http://localhost:3000/api/user/${userId}/progress`);
     setWaitingForSelfAssessment(false);
     handleNext();
   };
@@ -48,10 +47,10 @@ export const LearnPage = () => {
     if (currentIndex < learningContent.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setShowAnswer(false);
-      await axios.post(`http://localhost:3000/api/progress`);
       setWaitingForSelfAssessment(false);
     } else {
       console.log("Learning session completed!");
+      await axios.post(`http://localhost:3000/api/user/${userId}/progress`);
     }
   };
 

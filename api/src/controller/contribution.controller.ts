@@ -1,7 +1,7 @@
 // src/controllers/contribution.controller.ts
 import { Request, Response } from "express";
-import { createContribution } from "../services/contributionn.service";
-import { getAllContributions } from "../services/contributionn.service";
+import { createContribution } from "../services/contribution.service";
+import { getAllContributions } from "../services/contribution.service";
 import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { ApiError } from "../utils/ApiError";

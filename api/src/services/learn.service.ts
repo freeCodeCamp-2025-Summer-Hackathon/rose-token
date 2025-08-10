@@ -3,7 +3,6 @@ import { Language, Level } from "../generated/prisma";
 
 //fetch for a specific language
 export const getLearningContentByLanguage = async (language: string) => {
-  console.log(language)
   return await prisma.contribution.findMany({
     where: { 
       language: language.toUpperCase() as Language 

@@ -71,8 +71,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", contributionRoutes);
-app.use("/fetchCourses", courseRoutes);
-app.use("/fetchLearning", learnRoutes);
+app.use("/api/fetchCourses", courseRoutes);
+app.use("/api/fetchLearning", learnRoutes);
 app.use("/posts", postRoutes);
 app.use("/api/user", progessRoutes)
 
