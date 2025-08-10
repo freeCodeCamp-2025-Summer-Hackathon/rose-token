@@ -4,6 +4,7 @@ import contributionRoutes from "./routes/contribution.routes";
 import courseRoutes from "./routes/course.routes";
 import learnRoutes from "./routes/learn.routes";
 import postRoutes from "./routes/post.routes";
+import progessRoutes from "./routes/progress.routes"
 //import cors from "cors";
 
 /*
@@ -73,6 +74,7 @@ app.use("/api", contributionRoutes);
 app.use("/fetchCourses", courseRoutes);
 app.use("/fetchLearning", learnRoutes);
 app.use("/posts", postRoutes);
+app.use("/api/user", progessRoutes)
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");

@@ -2,6 +2,7 @@
 //add contributions
 
 import { useState } from "react";
+import { Link } from "react-router";
 
 export const AddContributionPage = () => {
   const [contributionType, setContributionType] = useState('flashcard');
@@ -219,12 +220,9 @@ export const AddContributionPage = () => {
             >
               Submit Contribution
             </button>
-            <button
-              type="button"
-              className="px-6 py-3 bg-slate-200 text-slate-700 font-medium rounded-md hover:bg-slate-300 transition-colors"
-            >
-              Cancel
-            </button>
+             <div className="px-4 py-2 bg-slate-200 text-slate-700 rounded-md hover:bg-slate-300 transition-colors">
+                <Link to="/">Cancel</Link>
+              </div>
           </div>
         </form>
 

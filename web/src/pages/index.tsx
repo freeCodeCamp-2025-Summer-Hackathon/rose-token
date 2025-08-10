@@ -8,6 +8,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router";
 //import { useNavigate } from "react-router-dom";
 
 // Types
@@ -29,6 +30,8 @@ export const HomePage: React.FC = () => {
   const [mode, setMode] = useState<Mode>("learner");
   const [courses, setCourses] = useState<Course[]>([]);
   const [contributions, setContributions] = useState<Contribution[]>([]);
+  const [progress, setProgress] = useState<number>(0);
+  const userId = "68929dd13f1acbe5114c1077";
 
   useEffect(() => {
   // Fetch courses
@@ -47,6 +50,14 @@ export const HomePage: React.FC = () => {
       setContributions(contributionsWithVotes);
     })
     .catch(() => console.error("Failed to fetch contributions"));
+
+    // Fetch progress
+    axios
+    .get(`http://localhost:3000/api/user/${userId}/progress`)
+    .then((res: { data: {progress: number} }) => {
+      console.log(res.data)
+      setProgress(res.data.progress)})
+    .catch(() => console.error("Failed to fetch progress"));
 }, []);
 
 
@@ -88,9 +99,9 @@ export const HomePage: React.FC = () => {
           >
             Contributor
           </button>
-          <a href="/forum" className="px-4 py-2 ml-10 rounded border bg-gray-100 text-gray-800 hover:bg-gray-200">
-          Forum
-          </a>
+          <div className="px-4 py-2 ml-10 rounded border bg-gray-100 text-gray-800 hover:bg-gray-200">
+          <Link to="/forum">Forum</Link>
+          </div>
         </div>
 
         {/* Learner View */}
@@ -102,18 +113,25 @@ export const HomePage: React.FC = () => {
                 <div key={course.id} className="border rounded p-4 shadow-sm bg-white">
                   <h3 className="text-lg font-bold mb-1">{course.title}</h3>
                   <p className="text-sm text-gray-600 mb-2">{course.description}</p>
-                  <a
-  href="/learn"
-  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
->
-  Subscribe
-</a>
+                  <a href="/learn" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Subscribe
+                  </a>
                 </div>
               ))}
             </div>
 
             <h2 className="text-xl font-semibold mb-2">Your Progress</h2>
-            <div className="text-sm text-gray-600">Progress tracking coming soon...</div>
+             <div style={{ width: "200px", background: "#ddd", borderRadius: "8px" }}>
+  <div
+    style={{
+      width: `${progress}%`,
+      background: "green",
+      height: "20px",
+      borderRadius: "8px",
+      transition: "width 0.3s ease"
+    }}
+  />
+</div>          
           </section>
         )}
 
@@ -122,12 +140,9 @@ export const HomePage: React.FC = () => {
           <section>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Your Contributions</h2>
-             <a
-  href="/addcontrib"
-  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
->
-  + Add Contribution
-</a>
+            <div className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              <Link to="/addcontrib">+ Add Contribution</Link>
+            </div>
             </div>
 
             <ul className="space-y-4">

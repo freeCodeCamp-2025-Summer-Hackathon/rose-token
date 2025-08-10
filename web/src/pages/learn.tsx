@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import axios from "axios";
 
 export const LearnPage = () => {
@@ -8,6 +9,7 @@ export const LearnPage = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [waitingForSelfAssessment, setWaitingForSelfAssessment] = useState(false);
   const [loading, setLoading] = useState(true);
+  const userId = "68929dd13f1acbe5114c1077";
 
   const language = "Japanese"; 
 
@@ -16,6 +18,7 @@ export const LearnPage = () => {
       try {
         const res = await axios.get(`http://localhost:3000/fetchLearning/learn/${language}`);
         console.log("Fetched data:", res.data);
+        await axios.post(`http://localhost:3000/api/user/${userId}/progress`);
         setLearningContent(res.data);
       } catch (error) {
         console.error("Error fetching learning content", error);
@@ -41,10 +44,11 @@ export const LearnPage = () => {
     handleNext();
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIndex < learningContent.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setShowAnswer(false);
+      await axios.post(`http://localhost:3000/api/progress`);
       setWaitingForSelfAssessment(false);
     } else {
       console.log("Learning session completed!");
@@ -183,7 +187,9 @@ export const LearnPage = () => {
                   onClick={handleNext}
                   className="w-full py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
                 >
-                  {isLastItem ? 'Finish' : 'Next Card'}
+                  {isLastItem ? <div>
+                <Link to="/">Finish</Link>
+              </div> : 'Next Card'}
                 </button>
               )}
             </div>
@@ -193,7 +199,9 @@ export const LearnPage = () => {
               onClick={handleNext}
               className="px-8 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
             >
-              {isLastItem ? 'Finish' : 'Continue'}
+              {isLastItem ? <div>
+                <Link to="/">Finish</Link>
+              </div> : 'Continue'}
             </button>
           )}
         </div>
