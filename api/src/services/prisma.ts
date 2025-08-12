@@ -5,6 +5,7 @@ import { demoComments } from "../../seeds/comments";
 
 const prisma = new PrismaClient();
 
+
 async function main(){
   console.log('Seeding users...');
   for (const user of demoUsers){
@@ -15,6 +16,8 @@ async function main(){
     })
   }
   console.log('Users seeded successfully!');
+
+
   for (const post of demoPosts){
     await prisma.post.upsert({
       where: { id: post.id },
@@ -32,6 +35,7 @@ async function main(){
   }
   console.log('Comments seeded successfully!');
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect()

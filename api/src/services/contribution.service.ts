@@ -1,105 +1,60 @@
+// src/services/contribution.service.ts
 import prisma from "./prisma";
+import { Level, Language, Category, ContributionType } from "../generated/prisma";
 
-enum Category {
-  GRAMMAR = "GRAMMAR",
-  VOCABULARY = "VOCABULARY",
-  SPEAKING = "SPEAKING",
-  LISTENING = "LISTENING",
-  WRITING = "WRITING",
+
+interface CreateContributionDTO {
+  type: ContributionType;
+  content: string;
+  category: Category;
+  difficulty: Level;
+  language: Language;
+  userId: string;
+  frontText: string;
+  backText: string;
+  noteText: string
 }
 
-export const contributionService = {
-  //Contribution
-  async createContribution(data: {
-    title: string;
-    content: string;
-    category: Category;
-    tags?: string[];
-    lessonId: string;
-  }) {
-    return prisma.contribution.create({ data });
-  },
+export const createContribution = async (data: CreateContributionDTO) => {
+  const { type, content, category, difficulty, language, userId, frontText, backText, noteText } = data;
 
-  async getContribution(id: string) {
-    return prisma.contribution.findUnique({
-      where: { id },
-    });
-  },
+  await prisma.course.create({
+    data: {
+      title: language,
+      language: language.toUpperCase() as Language,
+    }
+  });
 
-  async updateContribution(id: string, data: {
-    title?: string;
-    content?: string;
-    category?: Category;
-    tags?: string[];
-  }) {
-    return prisma.contribution.update({
-      where: { id },
-      data,
-    });
-  },
-
-  async deleteContribution(id: string) {
-    return prisma.contribution.delete({
-      where: { id },
-    });
-  },
-
-  //Tags
-  async addTag(id: string, tag: string) {
-    return prisma.contribution.update({
-      where: { id },
-      data: { tags: { push: tag } },
-    });
-  },
-
-  async removeTag(id: string, tag: string) {
-    const contribution = await prisma.contribution.findUnique({
-      where: { id },
-    });
-    if (!contribution) return null;
-    const updatedTags = contribution.tags.filter((t: string) => t !== tag);
-    return prisma.contribution.update({
-      where: { id },
-      data: { tags: updatedTags },
-    });
-  },
-
-  async updateTag(id: string, oldTag: string, newTag: string) {
-    const contribution = await prisma.contribution.findUnique({
-      where: { id },
-    });
-    if (!contribution) return null;
-    const updatedTags = contribution.tags.map((t: string) =>
-      t === oldTag ? newTag : t
-    );
-    return prisma.contribution.update({
-      where: { id },
-      data: { tags: updatedTags },
-    });
-  },
-
-  async getTags(id: string) {
-    const contribution = await prisma.contribution.findUnique({
-      where: { id },
-    });
-    return contribution?.tags || [];
-  },
-
-  async filterByTag(tag: string) {
-    return prisma.contribution.findMany({
-      where: {
-        tags: {
-          has: tag,
-        },
+  const contribution = await prisma.contribution.create({
+    data: {
+      title: `${frontText} ${type.toLowerCase()}`,
+      type: type.toUpperCase() as ContributionType,
+      category: category.toUpperCase() as Category,
+      level: difficulty.toUpperCase() as Level,
+      contributor: {
+        connect: { id: userId },
       },
-    });
-  },
+      language: language.toUpperCase() as Language,
+      front: type.toUpperCase() === "FLASHCARD" ? frontText : undefined,
+      back: type.toUpperCase() === "FLASHCARD" ? backText : undefined,
+      body: type.toUpperCase() === "NOTE" ? noteText : undefined,
+      tags: [], 
+    },
+  });
 
-  //Category
-  async filterByCategory(category: Category) {
-    return prisma.contribution.findMany({
-      where: { category },
-    });
-  },
+  console.log("success");
+
+  return contribution;
 };
 
+export const getAllContributions = async () => {
+  return await prisma.contribution.findMany({
+  select: {
+    id: true,
+    title: true,
+  },
+  orderBy: {
+    createdAt: 'desc',
+  },
+});
+};
